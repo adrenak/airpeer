@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using Byn.Common;
 using System;
 
-namespace Byn.Net
-{
-    
+namespace Byn.Net {
+
     //TODO: List that keeps track of created networks will be moved into the
     //underlaying factories
-    public class WebRtcNetworkFactory : UnitySingleton<WebRtcNetworkFactory>
-    {
+    public class WebRtcNetworkFactory : UnitySingleton<WebRtcNetworkFactory> {
 
         //android needs a static init process. 
         /// <summary>
@@ -26,22 +24,18 @@ namespace Byn.Net
         private IWebRtcNetworkFactory mFactory = null;
         private List<IBasicNetwork> mCreatedNetworks = new List<IBasicNetwork>();
 
-        public static bool StaticInitSuccessful
-        {
-            get
-            {
+        public static bool StaticInitSuccessful {
+            get {
                 return sStaticInitSuccessful;
             }
         }
 
-        private WebRtcNetworkFactory()
-        {
+        private WebRtcNetworkFactory() {
 
             //try to setup (this also checks if the platform is even supported)
             TryStaticInitialize();
             //setup failed? factory will be null so nothing can be created
-            if (sStaticInitSuccessful == false)
-            {
+            if (sStaticInitSuccessful == false) {
                 Debug.LogError("Initialization of the webrtc plugin failed. StaticInitSuccessful is false. ");
                 mFactory = null;
                 return;
@@ -57,7 +51,7 @@ namespace Byn.Net
             factory.Initialize();
             mFactory = factory;
             Debug.Log("Using Wrapper: " + WebRtcCSharp.WebRtcWrap.GetVersion() + " WebRTC: " + WebRtcCSharp.WebRtcWrap.GetWebRtcVersion());
-            
+
 #endif
 
         }
@@ -68,8 +62,7 @@ namespace Byn.Net
         /// Used for other libraries building on top of WebRtcNetwork.
         /// </summary>
         /// <returns>True if the platform is supported, false if not.</returns>
-        public static bool CheckNativeSupport()
-        {
+        public static bool CheckNativeSupport() {
             //do not access any platform specific code here. only check if there if the platform is supported
             //keep up to date with LogNativeSupportInfo()
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -86,9 +79,8 @@ namespace Byn.Net
         /// <summary>
         /// Prints platform specific info to the unity log
         /// </summary>
-        internal static void LogNativeSupportInfo()
-        {
-            
+        internal static void LogNativeSupportInfo() {
+
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             Debug.Log("Initializing native webrtc for windows ...");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -108,8 +100,7 @@ namespace Byn.Net
         /// It will set sStaticInitSuccessful to false if the platform isn't supported or the init process failed.
         /// 
         /// </summary>
-        public static void TryStaticInitialize()
-        {
+        public static void TryStaticInitialize() {
             //make sure it is called only once. no need for multiple static inits...
             if (sStaticInitTried)
                 return;
@@ -118,7 +109,7 @@ namespace Byn.Net
             Debug.Log("Using workaround for the SslStream.AuthenticateAsClient unity bug");
             //activate workaround for unity bug
             DefaultValues.AuthenticateAsClientBugWorkaround = true;
-            
+
 #if UNITY_WEBGL && !UNITY_EDITOR
 
             //check if the java script part is available
@@ -161,9 +152,8 @@ namespace Byn.Net
 #endif
         }
         //#if UNITY_ANDROID && !UNITY_EDITOR
-        private static bool TryInitAndroid()
-        {
-            
+        private static bool TryInitAndroid() {
+
 
             Debug.Log("TryInitAndroid");
 
@@ -171,13 +161,11 @@ namespace Byn.Net
             //try loading jingle_peerconnection_so
             //this will fail in normal builds but is needed to ensure the loading order
             //if the dynamic webrtc library was used to build
-            try
-            {
+            try {
                 AndroidJavaClass androidSystem = new AndroidJavaClass("java.lang.System");
                 androidSystem.CallStatic("loadLibrary", "jingle_peerconnection_so");
             }
-            catch (AndroidJavaException)
-            {
+            catch (AndroidJavaException) {
             }
 
             Debug.Log("get activity");
@@ -188,39 +176,33 @@ namespace Byn.Net
             Debug.Log("call InitAndroidContext");
             bool successful = WebRtcCSharp.RTCPeerConnectionFactory.InitAndroidContext(context.GetRawObject());
 
-            if (successful)
-            {
+            if (successful) {
                 Debug.Log("Android plugin successful initialized.");
             }
-            else
-            {
+            else {
                 Debug.LogError("Failed to initialize android plugin.");
             }
             return successful;
         }
-//#endif
-        public IBasicNetwork CreateDefault(string websocketUrl, IceServer[] urls = null)
-        {
+        //#endif
+        public IBasicNetwork CreateDefault(string websocketUrl, IceServer[] urls = null) {
             IBasicNetwork network = mFactory.CreateDefault(websocketUrl, urls);
             mCreatedNetworks.Add(network);
             return network;
         }
 
 
-        protected override void OnDestroy()
-        {
+        protected override void OnDestroy() {
             base.OnDestroy();
 
             Debug.Log("Network factory is being destroyed. All created basic networks will be destroyed as well!");
-            foreach (IBasicNetwork net in mCreatedNetworks)
-            {
+            foreach (IBasicNetwork net in mCreatedNetworks) {
                 net.Dispose();
             }
             mCreatedNetworks.Clear();
 
             //cleanup
-            if (mFactory != null)
-            {
+            if (mFactory != null) {
                 mFactory.Dispose();
             }
         }
