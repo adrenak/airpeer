@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 namespace AirPeer {
-    public class Node : MonoBehaviour {
+    public class Peer : MonoBehaviour {
         string k_SignallingServer = "wss://because-why-not.com:12777/chatapp";
         string k_ICEServer1 = "stun:because-why-not.com:12779";
         string k_ICEServer2 = "stun:stun.l.google.com:19302";
@@ -27,9 +27,10 @@ namespace AirPeer {
         Action<bool> m_ConnectionCallback;
         Action m_DisconnectionCallback;
 
-        public static Node CreateInstance(string name = "AirPeerInstance") {
+        public static Peer CreateInstance(string name = "AirPeerInstance") {
             var go = new GameObject(name);
-            return go.AddComponent<Node>();
+            DontDestroyOnLoad(go);
+            return go.AddComponent<Peer>();
         }
 
         private void OnDestroy() {
@@ -71,7 +72,7 @@ namespace AirPeer {
             m_Network.StopServer();
         }
 
-        public void JoinServer(string roomName, Action<bool> callback = null) {
+        public void ConnectToServer(string roomName, Action<bool> callback = null) {
             m_ConnectionCallback = callback;
             m_Network.Connect(roomName);
         }
@@ -81,7 +82,7 @@ namespace AirPeer {
             m_Network.Disconnect(new ConnectionId(1));
         }
 
-        public void Reset() {
+        void Reset() {
             m_ServerStartCallback = null;
             m_ServerStopCallback = null;
             m_ConnectionCallback = null;
@@ -102,16 +103,16 @@ namespace AirPeer {
             }
         }
 
-        public void Update() {
+        void Update() {
             if (m_Network != null) {
                 m_Network.Update();
-                ReadNetwork();
+                ReadNetworkEvents();
             }
             if (m_Network != null)
                 m_Network.Flush();
         }
 
-        void ReadNetwork() {
+        void ReadNetworkEvents() {
             NetworkEvent netEvent;
             while (m_Network != null && m_Network.Dequeue(out netEvent)) 
                 ProcessNetworkEvent(netEvent);
