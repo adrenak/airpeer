@@ -12,138 +12,10 @@ namespace Adrenak.AirPeer {
             return msg;
         }
 
-        public static string GetUTF8String(this byte[] bytes) {
-            return Encoding.UTF8.GetString(bytes);
-        }
-
-        // ================================================
-        // TO BYTE ARRAY
-        // ================================================
-        public static byte[] ToByteArray(this short[] arr, bool reverse = false) {
-            int size = 2;
-            int len = arr.Length * size;
-            byte[] result = new byte[len];
-
-            for(int i = 0; i < result.Length; i += size) {
-                byte[] data = BitConverter.GetBytes(arr[i / size]);
-                if (reverse) Array.Reverse(data);
-                Array.Copy(data, 0, result, i, size);
-            }
-            return result;
-        }
-
-        public static byte[] ToByteArray(this int[] arr, bool reverse = false) {
-            int size = 4;
-            int len = arr.Length * size;
-            byte[] result = new byte[len];
-
-            for (int i = 0; i < result.Length; i += size) {
-                byte[] data = BitConverter.GetBytes(arr[i / size]);
-                if (reverse) Array.Reverse(data);
-                Array.Copy(data, 0, result, i, size);
-            }
-            return result;
-        }
-
-        public static byte[] ToByteArray(this long[] arr, bool reverse = false) {
-            int size = 8;
-            int len = arr.Length * size;
-            byte[] result = new byte[len];
-
-            for (int i = 0; i < result.Length; i += size) {
-                byte[] data = BitConverter.GetBytes(arr[i / size]);
-                if (reverse) Array.Reverse(data);
-                Array.Copy(data, 0, result, i, size);
-            }
-            return result;
-        }
-
-        public static byte[] ToByteArray(this float[] arr, bool reverse = false) {
-            int size = 4;
-            int len = arr.Length * size;
-            byte[] result = new byte[len];
-
-            for (int i = 0; i < result.Length; i += size) {
-                byte[] data = BitConverter.GetBytes(arr[i / size]);
-                if (reverse) Array.Reverse(data);
-                Array.Copy(data, 0, result, i, size);
-            }
-            return result;
-        }
-
-        // ================================================
-        // FROM BYTE ARRAY
-        // ================================================
-        public static double[] ToDoubleArray(this byte[] arr, bool reverse = false) {
-            int size = 8;
-            if (reverse) Array.Reverse(arr);
-
-            int len = arr.Length / size;
-            var result = new double[len];
-            for (int i = 0; i < arr.Length; i += size) {
-                result[i / size] = BitConverter.ToDouble(arr, i);
-            }
-            return result;
-        }
-
-        public static short[] ToShortArray(this byte[] arr, bool reverse = false) {
-            int size = 2;
-            if (reverse) Array.Reverse(arr);
-
-            int len = arr.Length / size;
-            var result = new short[len];
-            for (int i = 0; i < arr.Length; i += size) {
-                result[i / size] = BitConverter.ToInt16(arr, i);
-            }
-            return result;
-        }
-
-        public static int[] ToIntArray(this byte[] arr, bool reverse = false) {
-            int size = 4;
-            if (reverse) Array.Reverse(arr);
-
-            int len = arr.Length / size;
-            var result = new int[len];
-            for (int i = 0; i < arr.Length; i += size) {
-                result[i / size] = BitConverter.ToInt32(arr, i);
-            }
-            return result;
-        }
-
-        public static long[] ToLongArray(this byte[] arr, bool reverse = false) {
-            int size = 8;
-            if (reverse) Array.Reverse(arr);
-
-            int len = arr.Length / size;
-            var result = new long[len];
-            for (int i = 0; i < arr.Length; i += size) {
-                result[i / size] = BitConverter.ToInt64(arr, i);
-            }
-            return result;
-        }
-
-        public static float[] ToFloatArray(this byte[] arr, bool reverse = false) {
-            int size = 4;
-            if (reverse) Array.Reverse(arr);
-
-            int len = arr.Length / size;
-            var result = new float[len];
-            for (int i = 0; i < arr.Length; i += size) {
-                result[i / size] = BitConverter.ToSingle(arr, i);
-            }
-            return result;
-        }
-
-        public static byte[] ToByteArray(this double[] arr, bool reverse = false) {
-            int size = 8;
-            int len = arr.Length * size;
-            byte[] result = new byte[len];
-
-            for (int i = 0; i < result.Length; i += size) {
-                byte[] data = BitConverter.GetBytes(arr[i / size]);
-                if (reverse) Array.Reverse(data);
-                Array.Copy(data, 0, result, i, size);
-            }
+        public static T[] Concat<T>(this T[] arr1, T[] arr2) {
+            var result = new T[arr1.Length + arr2.Length];
+            arr1.CopyTo(result, 0);
+            arr2.CopyTo(result, arr1.Length);
             return result;
         }
 
@@ -153,6 +25,100 @@ namespace Adrenak.AirPeer {
 
         public static void TryInvoke<T>(this Action<T> action, T param) {
             if (action != null) action(param);
+        }
+
+        // ================================================
+        // FROM BYTES
+        // ================================================
+        public static bool ToBoolean(this byte[] bytes) {
+            return BitConverter.ToBoolean(bytes, 0);
+        }
+        
+        public static short ToShort(this byte[] bytes) {
+            return BitConverter.ToInt16(bytes, 0);
+        }
+
+        public static ushort ToUShort(this byte[] bytes) {
+            return BitConverter.ToUInt16(bytes, 0);
+        }
+
+        public static int ToInt(this byte[] bytes) {
+            return BitConverter.ToInt32(bytes, 0);
+        }
+
+        public static uint ToUInt(this byte[] bytes) {
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        public static long ToLong(this byte[] bytes) {
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        public static ulong ToULong(this byte[] bytes) {
+            return BitConverter.ToUInt64(bytes, 0);
+        }
+
+        public static float ToFloat(this byte[] bytes) {
+            return BitConverter.ToSingle(bytes, 0);
+        }
+
+        public static double ToDouble(this byte[] bytes) {
+            return BitConverter.ToDouble(bytes, 0);
+        }
+
+        public static char ToChar(this byte[] bytes) {
+            return BitConverter.ToChar(bytes, 0);
+        }
+
+        public static string ToUTF8String(this byte[] bytes) {
+            return Encoding.UTF8.GetString(bytes);
+        }
+
+        // ================================================
+        // TO BYTES
+        // ================================================
+        public static byte[] GetBytes(this bool value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this short value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this ushort value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this int value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this uint value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this long value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this ulong value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this float value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(this double value) {
+            return BitConverter.GetBytes(value);
+        }
+
+        public static byte[] GetBytes(char val) {
+            return BitConverter.GetBytes(val);
+        }
+
+        public static byte[] GetUTF8Bytes(string value) {
+            return Encoding.UTF8.GetBytes(value);
         }
     }
 }

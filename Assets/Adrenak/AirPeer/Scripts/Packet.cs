@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Adrenak.AirPeer {
     public class Packet {
@@ -19,22 +18,9 @@ namespace Adrenak.AirPeer {
             var packet = new Packet();
             PayloadReader reader = new PayloadReader(bytes);
 
-            // Receivers
-            var receiverCount = reader.ReadShort();
-            var receiversB = reader.ReadBlock(receiverCount * 2);
-            var receivers = receiversB.ToShortArray();
-            
-            // Tag
-            var tagLen = reader.ReadShort();
-            var tagB = reader.ReadBlock(tagLen);
-            var tag = Encoding.UTF8.GetString(tagB);
-            
-            // Payload
-            var payload = reader.ReadBlock(bytes.Length - reader.index);
-
-            packet.Receivers = receivers;
-            packet.Tag = tag;
-            packet.Payload = payload;
+            packet.Receivers = reader.ReadShortArray();
+            packet.Tag = reader.ReadString();
+            packet.Payload = reader.ReadBytes(bytes.Length - reader.index);
 
             return packet;
         }
@@ -42,16 +28,9 @@ namespace Adrenak.AirPeer {
         public byte[] Serialize() {
             PayloadWriter writer = new PayloadWriter();
 
-            // Receivers
-            writer.WriteShort((short)Receivers.Length);
-            writer.WriteBlock(Receivers.ToByteArray());
-
-            // tag
-            writer.WriteShort((short)Tag.Length);
-            writer.WriteBlock(Encoding.UTF8.GetBytes(Tag));
-
-            // Payload
-            writer.WriteBlock(Payload);
+            writer.WriteShortArray(Receivers);
+            writer.WriteString(Tag);
+            writer.WriteBytes(Payload);
 
             return writer.Bytes;
         }

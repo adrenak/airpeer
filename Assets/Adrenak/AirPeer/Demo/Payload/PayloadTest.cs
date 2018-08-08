@@ -1,0 +1,53 @@
+﻿using Adrenak.AirPeer;
+using UnityEngine;
+
+public class PayloadTest : MonoBehaviour {
+    void Start() {
+        GenericPayloadTest();
+        CustomPayloadTest();
+    }
+
+    private void CustomPayloadTest() {
+        Debug.Log("--------------------Custom Payload--------------------");
+        var p = new MovablePayload();
+        p.position = new Vector3(0, 0, 0);
+        p.eulerAngles = new Vector3(90, 90, 90);
+        p.velocity = Vector3.up;
+
+        var bytes = p.GetBytes();
+
+        var p2 = new MovablePayload();
+        p2.SetBytes(bytes);
+        Debug.Log(p2.position);
+        Debug.Log(p2.eulerAngles);
+        Debug.Log(p2.velocity);
+    }
+
+    void GenericPayloadTest() {
+        Debug.Log("--------------------Generic Payload--------------------");
+        PayloadWriter w = new PayloadWriter();
+        w.WriteString("test");
+        w.WriteShort(2);
+        w.WriteInt(2);
+        w.WriteLong(34);
+        w.WriteFloat(4.2f);
+        w.WriteDouble(435);
+        w.WriteChar('a');
+        w.WriteVector2(new Vector2(1, 1));
+        w.WriteVector3(new Vector3(3, 3, 3));
+        w.WriteRect(new Rect(0, 0, 1, 1));
+
+        PayloadReader r = new PayloadReader(w.Bytes);
+        Debug.Log(r.ReadString());
+        Debug.Log(r.ReadShort());
+        Debug.Log(r.ReadInt());
+        Debug.Log(r.ReadLong());
+        Debug.Log(r.ReadFloat());
+        Debug.Log(r.ReadDouble());
+        Debug.Log(r.ReadChar());
+        Debug.Log(r.ReadVector2());
+        Debug.Log(r.ReadVector3());
+        Debug.Log(r.ReadRect());
+    }
+	
+}
