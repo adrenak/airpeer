@@ -1,7 +1,8 @@
 ﻿using Byn.Net;
-using System.Text;
+using System.Linq;
 using UnityEngine;
 using System;
+using System.Text;
 using System.Collections.Generic;
 
 namespace Adrenak.AirPeer {
@@ -31,6 +32,9 @@ namespace Adrenak.AirPeer {
         public List<ConnectionId> ConnectionIds { get; private set; }
         public NodeMode Mode { get; private set; }
 
+        // ================================================
+        // LIFECYCLE
+        // ================================================
         public static Node Create(string name = "Node (Instance)") {
             var go = new GameObject(name);
             DontDestroyOnLoad(go);
@@ -75,6 +79,9 @@ namespace Adrenak.AirPeer {
             Deinit();
         }
 
+        // ================================================
+        // NETWORK API
+        // ================================================
         public void StartServer(string roomName) {
             m_Network.StartServer(roomName);
         }
@@ -91,21 +98,35 @@ namespace Adrenak.AirPeer {
             m_Network.Disconnect(new ConnectionId(1));
         }
 
-        public bool SendString(string msg, bool reliable = false, int offset = 0) {
-            if (string.IsNullOrEmpty(msg)) return false;
-
-            byte[] bytes = Encoding.UTF8.GetBytes(msg);
-            return SendData(bytes, reliable, offset);
+        public bool Send(string payload, bool reliable = false, short[] receivers = null) {
+            return Send(new Packet(null, Encoding.UTF8.GetBytes(payload)), reliable, receivers);
         }
 
-        public bool SendData(byte[] data, bool reliable = false, int offset = 0) {
-            if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
+        public bool Send(byte[] payload, bool reliable = false, short[] receivers = null) {
+            return Send(new Packet(null, payload), reliable, receivers);
+        }
 
-            foreach (var id in ConnectionIds)
-                m_Network.SendData(id, data, offset, data.Length, reliable);
+        public bool Send(string tag, string payload, bool reliable = false, short[] receivers = null) {
+            return Send(new Packet(tag, Encoding.UTF8.GetBytes(payload)), reliable, receivers);
+        }
+
+        public bool Send(string tag, byte[] payload, bool reliable = false, short[] receivers = null) {
+            return Send(new Packet(tag, payload), reliable, receivers);
+        }
+
+        public bool Send(Packet packet, bool reliable = false, short[] receivers = null) {
+            if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
+            
+            foreach(var cid in ConnectionIds) {
+                if(receivers == null || receivers.Contains(cid.id))
+                    m_Network.SendData(cid, packet.Payload, 0, packet.Payload.Length, reliable);
+            }
             return true;
         }
 
+        // ================================================
+        // INTERNAL
+        // ================================================
         void ReadNetworkEvents() {
             NetworkEvent netEvent;
             while (m_Network != null && m_Network.Dequeue(out netEvent))

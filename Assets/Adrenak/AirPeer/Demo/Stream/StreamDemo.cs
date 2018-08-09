@@ -15,7 +15,6 @@ public class StreamDemo : MonoBehaviour {
             Debug.Log("Could not start network");
             return;
         }
-        m_Host.StartServer("server-name");
         m_Host.OnServerStart += delegate () {
             m_Client = Node.Create("Client");
             m_Client.Init();
@@ -29,13 +28,18 @@ public class StreamDemo : MonoBehaviour {
         m_Host.OnServerFail += delegate() {
             Debug.LogError("Could not start server");
         };
+
+        m_Host.OnServerStop += delegate () {
+            Debug.Log("Server stopped");
+        };
+        m_Host.StartServer("server-name");
 	}
     
     private void Update() {
         if (m_Host != null && m_Host.ConnectionIds.Count > 0) {
             var msg = "Message from host to client: " + Time.frameCount;
             Debug.Log(msg);
-            m_Host.SendString(msg);
+            
         }
     }
 }
