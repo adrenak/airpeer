@@ -20,16 +20,16 @@ namespace Adrenak.AirPeer {
         public event Action OnServerStop;
         public event Action OnServerFail;
 
-        public event Action<ConnectionId> OnConnection;
-        public event Action<ConnectionId> OnDisconnection;
+        public event Action<ConnectionId> OnConnectionSuccess;
+        public event Action<ConnectionId> OnConnectionEnd;
         public event Action<ConnectionId> OnConnectionFail;
+        public event Action OnServerDown;
 
-        public event Action<NetworkEvent> OnNetworkEvent;
-        public event Action<NetworkEvent> OnGetReliableMessage;
-        public event Action<NetworkEvent> OnGetUnreliableMessage;
+        public event Action<NetworkEvent, Packet, bool> OnGetMessage;
 
         IBasicNetwork m_Network;
         public List<ConnectionId> ConnectionIds { get; private set; }
+        public ConnectionId Id;
         public NodeMode Mode { get; private set; }
 
         // ================================================
@@ -87,6 +87,7 @@ namespace Adrenak.AirPeer {
         }
 
         public void StopServer() {
+            Send(Reserved.ServerDown, string.Empty, true, null);
             m_Network.StopServer();
         }
 
@@ -116,10 +117,10 @@ namespace Adrenak.AirPeer {
 
         public bool Send(Packet packet, bool reliable = false, short[] receivers = null) {
             if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
-            
+           
             foreach(var cid in ConnectionIds) {
                 if(receivers == null || receivers.Contains(cid.id))
-                    m_Network.SendData(cid, packet.Payload, 0, packet.Payload.Length, reliable);
+                    m_Network.SendData(cid, packet.Serialize(), 0, packet.Serialize().Length, reliable);
             }
             return true;
         }
@@ -134,7 +135,6 @@ namespace Adrenak.AirPeer {
         }
 
         void ProcessNetworkEvent(NetworkEvent netEvent) {
-            OnNetworkEvent.TryInvoke(netEvent);
             switch (netEvent.Type) {
                 case NetEventType.ServerInitialized:
                     Mode = NodeMode.Server;
@@ -143,19 +143,19 @@ namespace Adrenak.AirPeer {
 
                 case NetEventType.ServerInitFailed:
                     Mode = NodeMode.Inactive;
-                    OnServerStop.TryInvoke();
+                    OnServerFail.TryInvoke();
                     break;
 
                 case NetEventType.ServerClosed:
                     Mode = NodeMode.Inactive;
-                    OnServerFail.TryInvoke();
+                    OnServerStop.TryInvoke();
                     break;
 
                 case NetEventType.NewConnection:
                     if (Mode != NodeMode.Server) Mode = NodeMode.Client;
 
                     ConnectionIds.Add(netEvent.ConnectionId);
-                    OnConnection.TryInvoke(netEvent.ConnectionId);
+                    OnConnectionSuccess.TryInvoke(netEvent.ConnectionId);
                     break;
 
                 case NetEventType.ConnectionFailed:
@@ -163,7 +163,7 @@ namespace Adrenak.AirPeer {
                         Mode = NodeMode.Inactive;
 
                     ConnectionIds.Add(netEvent.ConnectionId);
-                    OnConnection.TryInvoke(netEvent.ConnectionId);
+                    OnConnectionFail.TryInvoke(netEvent.ConnectionId);
                     break;
 
                 case NetEventType.Disconnected:
@@ -171,17 +171,38 @@ namespace Adrenak.AirPeer {
                         Mode = NodeMode.Inactive;
 
                     ConnectionIds.Remove(netEvent.ConnectionId);
-                    OnDisconnection.TryInvoke(netEvent.ConnectionId);
+                    OnConnectionEnd.TryInvoke(netEvent.ConnectionId);
                     break;
 
                 case NetEventType.ReliableMessageReceived:
-                    OnGetReliableMessage.TryInvoke(netEvent);
+                    HandleMessage(netEvent, true);
                     break;
 
                 case NetEventType.UnreliableMessageReceived:
-                    OnGetUnreliableMessage.TryInvoke(netEvent);
+                    HandleMessage(netEvent, false);
                     break;
             }
+        }
+
+        void HandleMessage(NetworkEvent netEvent, bool reliable) {
+            string reservedTag = GetReservedTag(netEvent);
+
+            if (reservedTag == string.Empty) 
+                OnGetMessage(netEvent, Packet.Deserialize(netEvent.GetDataAsByteArray()), reliable);
+
+            // handle reserved messages
+            switch (reservedTag) {
+                case Reserved.ServerDown:
+                    OnServerDown.TryInvoke();
+                    break;
+            }
+        }
+
+        string GetReservedTag(NetworkEvent netEvent) {
+            var packet = Packet.Deserialize(netEvent.GetDataAsByteArray());
+            if (packet != null && packet.Tag.StartsWith("reserved")) 
+                return packet.Tag;
+            return string.Empty;
         }
     }
 }
