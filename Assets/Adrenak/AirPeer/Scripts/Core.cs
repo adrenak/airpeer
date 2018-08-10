@@ -2,6 +2,7 @@
 
 namespace Adrenak.AirPeer {
     public class Core {
+        // ENDIANNESS
         static bool preferLittleEndian = true;
 
         public static bool ReqEndianCorrection {

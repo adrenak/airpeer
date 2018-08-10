@@ -1,72 +1,72 @@
-﻿using Byn.Net;
-using System.Linq;
+﻿using System;
+using Byn.Net;
 using UnityEngine;
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace Adrenak.AirPeer {
-    // TODO: Split this class into server, client, event manager, message manager
     public class Node : MonoBehaviour {
+        public enum State {
+            Inactive,
+            Offline,
+            Server,
+            Client
+        }
+
         string k_SignallingServer = "wss://because-why-not.com:12777/chatapp";
         string k_ICEServer1 = "stun:because-why-not.com:12779";
         string k_ICEServer2 = "stun:stun.l.google.com:19302";
 
-        public event Action OnServerStart;
-        public event Action OnServerStop;
-        public event Action OnServerFail;
+        Action<bool> m_StartServerCallback;
+        Action m_StopServerCallback;
+        Action<ConnectionId> m_ConnectCallback;
+        Action<ConnectionId> m_DisconnectCallback;
 
-        public event Action<ConnectionId> OnConnectionSuccess;
-        public event Action<ConnectionId> OnConnectionEnd;
-        public event Action<ConnectionId> OnConnectionFail;
+        public event Action OnServerDown;
         public event Action<ConnectionId> OnJoin;
         public event Action<ConnectionId> OnLeave;
-        public event Action OnServerDown;
-
         public event Action<ConnectionId, Packet, bool> OnGetMessage;
 
         IBasicNetwork m_Network;
         public List<ConnectionId> ConnectionIds { get; private set; }
-        public ConnectionId Id {
+        public ConnectionId CId {
             get {
                 if (ConnectionIds == null || ConnectionIds.Count == 0)
                     return ConnectionId.INVALID;
                 return ConnectionIds[0];
             }
         }
-        public NodeMode Mode { get; private set; }
+        public State Status { get; private set; }
 
         // ================================================
         // LIFECYCLE
         // ================================================
-        public static Node New(string name = "Node (Instance)") {
+        public static Node New(string name = "Adrenak.AirPeer.Node") {
             var go = new GameObject(name);
             DontDestroyOnLoad(go);
             return go.AddComponent<Node>();
         }
 
         public bool Init() {
-            if(ConnectionIds != null) 
-                ConnectionIds.Clear();
-
-            if (m_Network != null) 
-                m_Network.Dispose();
+            Deinit();
 
             ConnectionIds = new List<ConnectionId>();
             m_Network = WebRtcNetworkFactory.Instance.CreateDefault(
                 k_SignallingServer,
-                new[] {
-                    new IceServer(k_ICEServer1),
-                    new IceServer(k_ICEServer2)
-                }
+                new[] { new IceServer(k_ICEServer1), new IceServer(k_ICEServer2) }
             );
+            var result = m_Network != null;
+            if (result)
+                Status = State.Offline;
+            else
+                Status = State.Inactive;
             return m_Network != null;
         }
 
         public void Deinit() {
-            ConnectionIds.Clear();
-            m_Network.Dispose();
-            m_Network = null;
+            if (m_Network != null) {
+                m_Network.Dispose();
+                m_Network = null;
+            }
         }
 
         void Update() {
@@ -85,37 +85,41 @@ namespace Adrenak.AirPeer {
         // ================================================
         // NETWORK API
         // ================================================
-        public void StartServer(string roomName) {
-            Init();
+        public void StartServer(string roomName, Action<bool> callback) {
+            m_StartServerCallback = callback;
             m_Network.StartServer(roomName);
         }
 
-        public void StopServer() {
-            Send(Packet.From(Id).WithTag(ReservedTags.ServerDown), true);
+        public void StopServer(Action callback) {
+            // WebRTC doesn't tell the client when the server it is connected to
+            // goes offline. So broadcast a reserved event message to everyone
+            Send(Packet.From(CId).WithTag(ReservedTags.ServerDown), true);
+            m_StopServerCallback = callback;
             m_Network.StopServer();
         }
 
-        public void Connect(string roomName) {
+        public void Connect(string roomName, Action<ConnectionId> callback) {
+            m_ConnectCallback = callback;
             m_Network.Connect(roomName);
         }
 
-        public void Disconnect() {
-            m_Network.Disconnect(Id );
+        public void Disconnect(Action<ConnectionId> callback) {
+            m_DisconnectCallback = callback;
+            m_Network.Disconnect(CId);
         }
 
         public bool Send(Packet packet, bool reliable = false) {
             if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
 
-            var receivers = packet.Receivers;
-            foreach(var cid in ConnectionIds) {
-                if (receivers.Contains(cid.id) && cid.id != Id.id)
-                    m_Network.SendData(cid, packet.Serialize(), 0, packet.Serialize().Length, reliable);
-            }
+            var recipients = packet.Recipients;
+            foreach(var cid in ConnectionIds) 
+                m_Network.SendData(cid, packet.Serialize(), 0, packet.Serialize().Length, reliable);
+            
             return true;
         }
         
         // ================================================
-        // INTERNAL
+        // NETWORK EVENT PROCESSING
         // ================================================
         void ReadNetworkEvents() {
             NetworkEvent netEvent;
@@ -126,95 +130,134 @@ namespace Adrenak.AirPeer {
         void ProcessNetworkEvent(NetworkEvent netEvent) {
             switch (netEvent.Type) {
                 case NetEventType.ServerInitialized:
-                    ConnectionIds.Add(new ConnectionId(0));
-                    Mode = NodeMode.Server;
-                    OnServerStart.TryInvoke();
+                    OnServerInit(netEvent);
                     break;
 
                 case NetEventType.ServerInitFailed:
-                    Deinit();
-                    Mode = NodeMode.Ready;
-                    OnServerFail.TryInvoke();
+                    OnServerInitFailed(netEvent);
                     break;
 
                 case NetEventType.ServerClosed:
-                    Mode = NodeMode.Ready;
-                    OnServerStop.TryInvoke();
+                    OnServerClosed(netEvent);
                     break;
 
                 case NetEventType.NewConnection:
-                    ConnectionId newid = netEvent.ConnectionId;
-                    ConnectionIds.Add(newid);
-
-                    if(Mode == NodeMode.Ready)
-                        Mode = NodeMode.Client;
-                    else if(Mode == NodeMode.Server) {
-                        foreach(var id in ConnectionIds) {
-                            if (id.id == 0 || id.id == newid.id) continue;
-
-                            byte[] payload;
-
-                            // Announce the new connection to the old ones
-                            payload = PayloadWriter.New().WriteShort(newid.id).Bytes;
-                            Send(Packet.From(Id).To(id).With(ReservedTags.ConnectionRegister, payload), true);
-
-                            payload = PayloadWriter.New().WriteShort(id.id).Bytes;
-                            Send(Packet.From(Id).To(newid).With(ReservedTags.ConnectionRegister, payload), true);
-                        }
-                    }
-                    
-                    OnConnectionSuccess.TryInvoke(netEvent.ConnectionId);
+                    OnNewConnection(netEvent);
                     break;
 
                 case NetEventType.ConnectionFailed:
-                    Deinit();
-                    Mode = NodeMode.Ready;
-
-                    OnConnectionFail.TryInvoke(netEvent.ConnectionId);
+                    OnConnectionFailed(netEvent);
                     break;
 
                 case NetEventType.Disconnected:
-                    if(Mode == NodeMode.Client) {
-                        Mode = NodeMode.Ready;
-                        Deinit();
-                    }
-                    else if(Mode == NodeMode.Server) {
-                        var leftid = netEvent.ConnectionId;
-                        ConnectionIds.Remove(netEvent.ConnectionId);
-
-                        var payload = PayloadWriter.New().WriteShort(leftid.id).Bytes;
-                        Send(Packet.From(Id).With(ReservedTags.ConnectionDeregister, payload), true);
-                    }
-
-                    OnConnectionEnd.TryInvoke(netEvent.ConnectionId);
+                    OnDisconnected(netEvent);
                     break;
 
                 case NetEventType.ReliableMessageReceived:
-                    HandleMessage(netEvent, true);
+                    OnMessageReceived(netEvent, true);
                     break;
 
                 case NetEventType.UnreliableMessageReceived:
-                    HandleMessage(netEvent, false);
+                    OnMessageReceived(netEvent, false);
                     break;
             }
         }
 
-        void HandleMessage(NetworkEvent netEvent, bool reliable) {
+        void OnServerInit(NetworkEvent netEvent) {
+            ConnectionIds.Add(new ConnectionId(0));
+            Status = State.Server;
+            m_StartServerCallback.TryInvoke(true);
+            m_StartServerCallback = null;
+        }
+
+        void OnServerInitFailed(NetworkEvent netEvent) {
+            Deinit();
+            Status = State.Offline;
+            m_StartServerCallback.TryInvoke(false);
+            m_StartServerCallback = null;
+        }
+
+        void OnServerClosed(NetworkEvent netEvent) {
+            Status = State.Offline;
+            m_StopServerCallback.TryInvoke();
+            m_StopServerCallback = null;
+        }
+
+        void OnNewConnection(NetworkEvent netEvent) {
+            ConnectionId newid = netEvent.ConnectionId;
+            ConnectionIds.Add(newid);
+
+            if (Status == State.Offline) {
+                // Add server as a connection
+                ConnectionIds.Add(new ConnectionId(0));
+                Status = State.Client;
+            }
+            else if (Status == State.Server) {
+                foreach (var id in ConnectionIds) {
+                    if (id.id == 0 || id.id == newid.id) continue;
+
+                    byte[] payload;
+
+                    // Announce the new connection to the old ones
+                    payload = PayloadWriter.New().WriteShort(newid.id).Bytes;
+                    Send(Packet.From(this).To(id).With(ReservedTags.ConnectionRegister, payload), true);
+
+                    payload = PayloadWriter.New().WriteShort(id.id).Bytes;
+                    Send(Packet.From(this).To(newid).With(ReservedTags.ConnectionRegister, payload), true);
+                }
+            }
+
+            m_ConnectCallback.TryInvoke(newid);
+            m_ConnectCallback = null;
+        }
+
+        void OnConnectionFailed(NetworkEvent netEvent) {
+            Deinit();
+            Status = State.Offline;
+            m_ConnectCallback.TryInvoke(ConnectionId.INVALID);
+            m_ConnectCallback = null;
+        }
+
+        private void OnDisconnected(NetworkEvent netEvent) {
+            if (Status == State.Client) {
+                Status = State.Offline;
+                Deinit();
+            }
+            else if (Status == State.Server) {
+                var dId = netEvent.ConnectionId;
+                ConnectionIds.Remove(netEvent.ConnectionId);
+
+                var payload = PayloadWriter.New().WriteShort(dId.id).Bytes;
+
+                // Clients are not aware of each other as this is a star network
+                // Send a reliable reserved message to annouce the disconnection
+                Send(Packet.From(CId).With(ReservedTags.ConnectionDeregister, payload), true);
+            }
+
+            m_DisconnectCallback.TryInvoke(CId);
+            m_DisconnectCallback = null;
+        }
+
+        void OnMessageReceived(NetworkEvent netEvent, bool reliable) {
             var packet = Packet.Deserialize(netEvent.GetDataAsByteArray());
-            string reservedTag = GetReservedTag(packet);
+            if (packet == null) {
+                Debug.Log("nop");
+                return;
+            }
+
+            string reservedTag = packet.Tag.StartsWith("reserved") ? packet.Tag : string.Empty;
 
             // If is not a reserved message
             if (reservedTag == string.Empty) {
                 OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
 
-                if(Mode == NodeMode.Server) {
-                    var receivers = packet.Receivers;
-                    foreach(var r in receivers) {
-                        if (r == Id.id || r == netEvent.ConnectionId.id) continue;
-                        Send(Packet.From(Id).To(r).With(ReservedTags.PacketForwarding, packet.Serialize()), true);
-                    }
+                if (Status != State.Server) return;
+
+                // The server tried o broadcast the packet to everyone else listed as recipients
+                foreach(var r in packet.Recipients) {
+                    if (r == CId.id || r == netEvent.ConnectionId.id) continue;
+                    Send(Packet.From(CId).To(r).With(ReservedTags.PacketForwarding, packet.Serialize()), true);
                 }
-                return;
             }
 
             // handle reserved messages
@@ -234,12 +277,6 @@ namespace Adrenak.AirPeer {
                     OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
                     break;
             }
-        }
-
-        string GetReservedTag(Packet packet) {
-            if (packet != null && packet.Tag.StartsWith("reserved")) 
-                return packet.Tag;
-            return string.Empty;
         }
     }
 }

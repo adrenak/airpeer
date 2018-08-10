@@ -9,37 +9,36 @@ public class StreamDemo : MonoBehaviour {
 	void Start () {
         Application.runInBackground = true;
 
-        // Create a host peer
         host = Node.New("Server");
         if (!host.Init()) {
             Debug.Log("Could not start network");
             return;
         }
-        host.OnServerStart += delegate () {
-            client = Node.New("Client");
-            client.Init();
-            client.Connect("server-name");
 
-            client.OnGetMessage += (e, p, r) => {
-                Debug.Log("Message received at client: " + p.Payload.ToUTF8String());
-            };
+        host.OnGetMessage += delegate (ConnectionId arg1, Packet arg2, bool arg3) {
+            Debug.Log("Host received message from " + arg1.id + " : " + arg2.Payload.ToUTF8String());
         };
+        
+        host.StartServer("room-name", success => {
+            Debug.Log("Server started? : " + success);
 
-        host.OnServerFail += delegate() {
-            Debug.LogError("Could not start server");
-        };
-
-        host.OnServerStop += delegate () {
-            Debug.Log("Server stopped");
-        };
-        host.StartServer("server-name");
+            if (!success) return;
+            StartClient(); 
+        });
 	}
+
+    void StartClient() {
+        client = Node.New("Client");
+        client.Init();
+        client.Connect("room-name", cid => {
+            Debug.Log("Client connect success? : " + cid.IsValid());
+        });
+    }
     
     private void Update() {
-        if (host != null && host.ConnectionIds.Count > 0) {
-            var msg = "Message from host to client: " + Time.frameCount;
-            Debug.Log(msg);
-            
+        if (client != null && client.Status == Node.State.Client) {
+            var msg = "Client says : " + Time.frameCount;
+            client.Send(Packet.From(client).With("string", msg));            
         }
     }
 }

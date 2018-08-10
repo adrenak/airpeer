@@ -6,12 +6,12 @@ using System.Linq;
 namespace Adrenak.AirPeer {
     public class Packet {
         public short Sender { get; private set; }
-        public short[] Receivers { get; private set; }
+        public short[] Recipients { get; private set; }
         public string Tag { get; private set; }
         public byte[] Payload { get; private set; }
 
         public bool IsToAll {
-            get { return Receivers == null || Receivers.Length == 0; }
+            get { return Recipients == null || Recipients.Length == 0; }
         }
 
         public bool HasNoTag {
@@ -24,7 +24,7 @@ namespace Adrenak.AirPeer {
 
         Packet() {
             Sender = -1;
-            Receivers = new short[0];
+            Recipients = new short[0];
             Tag = string.Empty;
             Payload = new byte[0];
         }
@@ -32,9 +32,8 @@ namespace Adrenak.AirPeer {
         // ================================================
         // OBJECT BUILDER
         // ================================================
-        [Obsolete("Avoid using this. Not yet determined if feature this is a good idea")]
         public static Packet From(Node node) {
-            return From(node.Id);
+            return From(node.CId);
         }
 
         public static Packet From(ConnectionId cid) {
@@ -47,23 +46,23 @@ namespace Adrenak.AirPeer {
             return cted;
         }
 
-        public Packet To(ConnectionId receiver) {
-            return To(new[] { receiver.id });
+        public Packet To(ConnectionId recipient) {
+            return To(new[] { recipient.id });
         }
 
-        public Packet To(short receiver) {
-            return To(new[] { receiver });
+        public Packet To(short recipient) {
+            return To(new[] { recipient });
         }
 
-        public Packet To(ConnectionId[] receivers) {
-            if (receivers == null) receivers = new ConnectionId[0];
-            Receivers = receivers.Select(x => x.id).ToList().ToArray();
+        public Packet To(ConnectionId[] recipients) {
+            if (recipients == null) recipients = new ConnectionId[0];
+            Recipients = recipients.Select(x => x.id).ToList().ToArray();
             return this;
         }
 
-        public Packet To(short[] receivers) {
-            if (receivers == null) receivers = new short[0];
-            Receivers = receivers;
+        public Packet To(short[] recipients) {
+            if (recipients == null) recipients = new short[0];
+            Recipients = recipients;
             return this;
         }
 
@@ -117,7 +116,7 @@ namespace Adrenak.AirPeer {
             var packet = new Packet();
             try {
                 packet.Sender = reader.ReadShort();
-                packet.Receivers = reader.ReadShortArray();
+                packet.Recipients = reader.ReadShortArray();
                 packet.Tag = reader.ReadString();
                 packet.Payload = reader.ReadBytes(bytes.Length - reader.index);
             }
@@ -133,7 +132,7 @@ namespace Adrenak.AirPeer {
             PayloadWriter writer = PayloadWriter.New();
             try {
                 writer.WriteShort(Sender);
-                writer.WriteShortArray(Receivers);
+                writer.WriteShortArray(Recipients);
                 writer.WriteString(Tag);
                 writer.WriteBytes(Payload);
             }
