@@ -10,13 +10,13 @@ public class StreamDemo : MonoBehaviour {
         Application.runInBackground = true;
 
         // Create a host peer
-        host = Node.Create("Server");
+        host = Node.New("Server");
         if (!host.Init()) {
             Debug.Log("Could not start network");
             return;
         }
         host.OnServerStart += delegate () {
-            client = Node.Create("Client");
+            client = Node.New("Client");
             client.Init();
             client.Connect("server-name");
 

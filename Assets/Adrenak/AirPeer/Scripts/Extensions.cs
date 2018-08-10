@@ -6,10 +6,8 @@ namespace Adrenak.AirPeer {
     public static class Extensions {
         public static string GetDataAsString(this NetworkEvent netEvent) {
             if (netEvent.MessageData == null) return netEvent.Type.ToString();
-            MessageDataBuffer buffer = netEvent.MessageData;
-            string msg = Encoding.UTF8.GetString(buffer.Buffer, 0, buffer.ContentLength);
-            buffer.Dispose();
-            return msg;
+            var bytes = netEvent.GetDataAsByteArray();
+            return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
 
         public static T[] Concat<T>(this T[] arr1, T[] arr2) {
@@ -19,12 +17,24 @@ namespace Adrenak.AirPeer {
             return result;
         }
 
+        public static T[] ToArray<T>(this T singleObject) {
+            return new T[] { singleObject };
+        }
+
         public static void TryInvoke(this Action action) {
             if (action != null) action();
         }
 
         public static void TryInvoke<T>(this Action<T> action, T param) {
             if (action != null) action(param);
+        }
+
+        public static void TryInvoke<T1, T2>(this Action<T1, T2> action, T1 param1, T2 param2) {
+            if (action != null) action(param1, param2);
+        }
+
+        public static void TryInvoke<T1, T2, T3>(this Action<T1, T2, T3> action, T1 param1, T2 param2, T3 param3) {
+            if (action != null) action(param1, param2, param3);
         }
 
         // ================================================

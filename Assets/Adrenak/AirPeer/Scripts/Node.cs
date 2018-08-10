@@ -6,12 +6,8 @@ using System.Text;
 using System.Collections.Generic;
 
 namespace Adrenak.AirPeer {
+    // TODO: Split this class into server, client, event manager, message manager
     public class Node : MonoBehaviour {
-        public enum NodeMode {
-            Inactive,
-            Server,
-            Client
-        }
         string k_SignallingServer = "wss://because-why-not.com:12777/chatapp";
         string k_ICEServer1 = "stun:because-why-not.com:12779";
         string k_ICEServer2 = "stun:stun.l.google.com:19302";
@@ -23,19 +19,27 @@ namespace Adrenak.AirPeer {
         public event Action<ConnectionId> OnConnectionSuccess;
         public event Action<ConnectionId> OnConnectionEnd;
         public event Action<ConnectionId> OnConnectionFail;
+        public event Action<ConnectionId> OnJoin;
+        public event Action<ConnectionId> OnLeave;
         public event Action OnServerDown;
 
-        public event Action<NetworkEvent, Packet, bool> OnGetMessage;
+        public event Action<ConnectionId, Packet, bool> OnGetMessage;
 
         IBasicNetwork m_Network;
         public List<ConnectionId> ConnectionIds { get; private set; }
-        public ConnectionId Id;
+        public ConnectionId Id {
+            get {
+                if (ConnectionIds == null || ConnectionIds.Count == 0)
+                    return ConnectionId.INVALID;
+                return ConnectionIds[0];
+            }
+        }
         public NodeMode Mode { get; private set; }
 
         // ================================================
         // LIFECYCLE
         // ================================================
-        public static Node Create(string name = "Node (Instance)") {
+        public static Node New(string name = "Node (Instance)") {
             var go = new GameObject(name);
             DontDestroyOnLoad(go);
             return go.AddComponent<Node>();
@@ -61,7 +65,6 @@ namespace Adrenak.AirPeer {
 
         public void Deinit() {
             ConnectionIds.Clear();
-            ConnectionIds = null;
             m_Network.Dispose();
             m_Network = null;
         }
@@ -71,7 +74,7 @@ namespace Adrenak.AirPeer {
                 m_Network.Update();
                 ReadNetworkEvents();
             }
-            if (m_Network != null)
+            if(m_Network != null)
                 m_Network.Flush();
         }
 
@@ -83,11 +86,12 @@ namespace Adrenak.AirPeer {
         // NETWORK API
         // ================================================
         public void StartServer(string roomName) {
+            Init();
             m_Network.StartServer(roomName);
         }
 
         public void StopServer() {
-            Send(Reserved.ServerDown, string.Empty, true, null);
+            Send(Packet.From(Id).WithTag(ReservedTags.ServerDown), true);
             m_Network.StopServer();
         }
 
@@ -96,35 +100,20 @@ namespace Adrenak.AirPeer {
         }
 
         public void Disconnect() {
-            m_Network.Disconnect(new ConnectionId(1));
+            m_Network.Disconnect(Id );
         }
 
-        public bool Send(string payload, bool reliable = false, short[] receivers = null) {
-            return Send(new Packet(null, Encoding.UTF8.GetBytes(payload)), reliable, receivers);
-        }
-
-        public bool Send(byte[] payload, bool reliable = false, short[] receivers = null) {
-            return Send(new Packet(null, payload), reliable, receivers);
-        }
-
-        public bool Send(string tag, string payload, bool reliable = false, short[] receivers = null) {
-            return Send(new Packet(tag, Encoding.UTF8.GetBytes(payload)), reliable, receivers);
-        }
-
-        public bool Send(string tag, byte[] payload, bool reliable = false, short[] receivers = null) {
-            return Send(new Packet(tag, payload), reliable, receivers);
-        }
-
-        public bool Send(Packet packet, bool reliable = false, short[] receivers = null) {
+        public bool Send(Packet packet, bool reliable = false) {
             if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
-           
+
+            var receivers = packet.Receivers;
             foreach(var cid in ConnectionIds) {
-                if(receivers == null || receivers.Contains(cid.id))
+                if (receivers.Contains(cid.id) && cid.id != Id.id)
                     m_Network.SendData(cid, packet.Serialize(), 0, packet.Serialize().Length, reliable);
             }
             return true;
         }
-
+        
         // ================================================
         // INTERNAL
         // ================================================
@@ -137,40 +126,66 @@ namespace Adrenak.AirPeer {
         void ProcessNetworkEvent(NetworkEvent netEvent) {
             switch (netEvent.Type) {
                 case NetEventType.ServerInitialized:
+                    ConnectionIds.Add(new ConnectionId(0));
                     Mode = NodeMode.Server;
                     OnServerStart.TryInvoke();
                     break;
 
                 case NetEventType.ServerInitFailed:
-                    Mode = NodeMode.Inactive;
+                    Deinit();
+                    Mode = NodeMode.Ready;
                     OnServerFail.TryInvoke();
                     break;
 
                 case NetEventType.ServerClosed:
-                    Mode = NodeMode.Inactive;
+                    Mode = NodeMode.Ready;
                     OnServerStop.TryInvoke();
                     break;
 
                 case NetEventType.NewConnection:
-                    if (Mode != NodeMode.Server) Mode = NodeMode.Client;
+                    ConnectionId newid = netEvent.ConnectionId;
+                    ConnectionIds.Add(newid);
 
-                    ConnectionIds.Add(netEvent.ConnectionId);
+                    if(Mode == NodeMode.Ready)
+                        Mode = NodeMode.Client;
+                    else if(Mode == NodeMode.Server) {
+                        foreach(var id in ConnectionIds) {
+                            if (id.id == 0 || id.id == newid.id) continue;
+
+                            byte[] payload;
+
+                            // Announce the new connection to the old ones
+                            payload = PayloadWriter.New().WriteShort(newid.id).Bytes;
+                            Send(Packet.From(Id).To(id).With(ReservedTags.ConnectionRegister, payload), true);
+
+                            payload = PayloadWriter.New().WriteShort(id.id).Bytes;
+                            Send(Packet.From(Id).To(newid).With(ReservedTags.ConnectionRegister, payload), true);
+                        }
+                    }
+                    
                     OnConnectionSuccess.TryInvoke(netEvent.ConnectionId);
                     break;
 
                 case NetEventType.ConnectionFailed:
-                    if (Mode != NodeMode.Server)
-                        Mode = NodeMode.Inactive;
+                    Deinit();
+                    Mode = NodeMode.Ready;
 
-                    ConnectionIds.Add(netEvent.ConnectionId);
                     OnConnectionFail.TryInvoke(netEvent.ConnectionId);
                     break;
 
                 case NetEventType.Disconnected:
-                    if (Mode != NodeMode.Server)
-                        Mode = NodeMode.Inactive;
+                    if(Mode == NodeMode.Client) {
+                        Mode = NodeMode.Ready;
+                        Deinit();
+                    }
+                    else if(Mode == NodeMode.Server) {
+                        var leftid = netEvent.ConnectionId;
+                        ConnectionIds.Remove(netEvent.ConnectionId);
 
-                    ConnectionIds.Remove(netEvent.ConnectionId);
+                        var payload = PayloadWriter.New().WriteShort(leftid.id).Bytes;
+                        Send(Packet.From(Id).With(ReservedTags.ConnectionDeregister, payload), true);
+                    }
+
                     OnConnectionEnd.TryInvoke(netEvent.ConnectionId);
                     break;
 
@@ -185,21 +200,43 @@ namespace Adrenak.AirPeer {
         }
 
         void HandleMessage(NetworkEvent netEvent, bool reliable) {
-            string reservedTag = GetReservedTag(netEvent);
+            var packet = Packet.Deserialize(netEvent.GetDataAsByteArray());
+            string reservedTag = GetReservedTag(packet);
 
-            if (reservedTag == string.Empty) 
-                OnGetMessage(netEvent, Packet.Deserialize(netEvent.GetDataAsByteArray()), reliable);
+            // If is not a reserved message
+            if (reservedTag == string.Empty) {
+                OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
+
+                if(Mode == NodeMode.Server) {
+                    var receivers = packet.Receivers;
+                    foreach(var r in receivers) {
+                        if (r == Id.id || r == netEvent.ConnectionId.id) continue;
+                        Send(Packet.From(Id).To(r).With(ReservedTags.PacketForwarding, packet.Serialize()), true);
+                    }
+                }
+                return;
+            }
 
             // handle reserved messages
             switch (reservedTag) {
-                case Reserved.ServerDown:
+                case ReservedTags.ServerDown:
                     OnServerDown.TryInvoke();
+                    break;
+                case ReservedTags.ConnectionRegister:
+                    ConnectionIds.Add(netEvent.ConnectionId);
+                    OnJoin.TryInvoke(netEvent.ConnectionId);
+                    break;
+                case ReservedTags.ConnectionDeregister:
+                    ConnectionIds.Remove(netEvent.ConnectionId);
+                    OnLeave.TryInvoke(netEvent.ConnectionId);
+                    break;
+                case ReservedTags.PacketForwarding:
+                    OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
                     break;
             }
         }
 
-        string GetReservedTag(NetworkEvent netEvent) {
-            var packet = Packet.Deserialize(netEvent.GetDataAsByteArray());
+        string GetReservedTag(Packet packet) {
             if (packet != null && packet.Tag.StartsWith("reserved")) 
                 return packet.Tag;
             return string.Empty;

@@ -1,18 +1,14 @@
 ﻿using Byn.Net;
-using System.Linq;
 using UnityEngine;
-using System;
-using System.Text;
-using System.Collections.Generic;
 
 namespace Adrenak.AirPeer {
     public class Test : MonoBehaviour {
         Node n1, n2;
 
         private void Start() {
-            n1 = Node.Create();
+            n1 = Node.New();
             n1.Init();
-            n2 = Node.Create();
+            n2 = Node.New();
             n2.Init();
 
             setup1();
@@ -51,9 +47,12 @@ namespace Adrenak.AirPeer {
             };
 
             n1.OnServerDown += delegate () {
-                Debug.Log("n2: on down");
+                Debug.Log("n1: on down");
             };
 
+            n1.OnGetMessage += delegate (ConnectionId arg1, Packet arg2, bool arg3) {
+                Debug.Log("n1 : message from " + arg1.id + " : " + arg2.Payload.ToUTF8String());
+            };
         }
 
         [ContextMenu("start server1")]
@@ -76,10 +75,17 @@ namespace Adrenak.AirPeer {
             n1.Disconnect();
         }
 
+        [ContextMenu("send 1")]
+        void send1() {
+            n1.Send(Packet.From(n1.Id).WithPayload("payload1"));
+        }
+
         [ContextMenu("id 2")]
         void id2() {
             Debug.Log(n2.Id.id);
         }
+
+
 
         [ContextMenu("setup 2")]
         private void setup2() {
@@ -110,6 +116,10 @@ namespace Adrenak.AirPeer {
             n2.OnServerDown += delegate () {
                 Debug.Log("n2: on down");
             };
+
+            n2.OnGetMessage += delegate (ConnectionId arg1, Packet arg2, bool arg3) {
+                Debug.Log("n2 : message from " + arg1.id + " : " + arg2.Payload.ToUTF8String());
+            };
         }
 
         [ContextMenu("start server2")]
@@ -131,6 +141,11 @@ namespace Adrenak.AirPeer {
         void disconn2() {
             n2.Disconnect();
         }
+        [ContextMenu("send 2")]
+        void send2() {
+            n2.Send(Packet.From(n2.Id).WithPayload("payload2"));
+        }
+
 
         [ContextMenu("XXXX")]
         void xxxx() {

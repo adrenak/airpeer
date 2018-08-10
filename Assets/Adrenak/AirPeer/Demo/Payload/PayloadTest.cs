@@ -9,14 +9,14 @@ public class PayloadTest : MonoBehaviour {
 
     private void CustomPayloadTest() {
         Debug.Log("--------------------Custom Payload--------------------");
-        var p = new MovablePayload();
+        var p = new ExampleCustomPayload();
         p.position = new Vector3(0, 0, 0);
         p.eulerAngles = new Vector3(90, 90, 90);
         p.velocity = Vector3.up;
 
         var bytes = p.GetBytes();
 
-        var p2 = new MovablePayload();
+        var p2 = new ExampleCustomPayload();
         p2.SetBytes(bytes);
         Debug.Log(p2.position);
         Debug.Log(p2.eulerAngles);
@@ -25,7 +25,7 @@ public class PayloadTest : MonoBehaviour {
 
     void GenericPayloadTest() {
         Debug.Log("--------------------Generic Payload--------------------");
-        PayloadWriter w = new PayloadWriter();
+        PayloadWriter w = PayloadWriter.New();
         w.WriteString("test");
         w.WriteShort(2);
         w.WriteInt(2);

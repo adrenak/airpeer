@@ -7,8 +7,12 @@ namespace Adrenak.AirPeer {
     public class PayloadWriter {
         List<byte> m_Bytes;
 
-        public PayloadWriter() {
+        PayloadWriter() {
             m_Bytes = new List<byte>();
+        }
+
+        public static PayloadWriter New() {
+            return new PayloadWriter();
         }
         
         public byte[] Bytes {
@@ -16,13 +20,14 @@ namespace Adrenak.AirPeer {
         }
 
         // Default types
-        public void WriteShort(Int16 value) {
+        public PayloadWriter WriteShort(Int16 value) {
             var bytes = BitConverter.GetBytes(value);
             Core.EndianCorrection(bytes);
             WriteBytes(bytes);
+            return this;
         }
 
-        public void WriteShortArray(Int16[] array) {
+        public PayloadWriter WriteShortArray(Int16[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
@@ -32,15 +37,17 @@ namespace Adrenak.AirPeer {
                 Core.EndianCorrection(rB);
                 WriteBytes(rB);
             }
+            return this;
         }
 
-        public void WriteInt(Int32 value) {
+        public PayloadWriter WriteInt(Int32 value) {
             var bytes = BitConverter.GetBytes(value);
             Core.EndianCorrection(bytes);
             WriteBytes(bytes);
+            return this;
         }
 
-        public void WriteIntArray(Int32[] array) {
+        public PayloadWriter WriteIntArray(Int32[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
@@ -50,15 +57,17 @@ namespace Adrenak.AirPeer {
                 Core.EndianCorrection(rB);
                 WriteBytes(rB);
             }
+            return this;
         }
 
-        public void WriteLong(Int64 value) {
+        public PayloadWriter WriteLong(Int64 value) {
             var bytes = BitConverter.GetBytes(value);
             Core.EndianCorrection(bytes);
             WriteBytes(bytes);
+            return this;
         }
 
-        public void WriteLongArray(Int64[] array) {
+        public PayloadWriter WriteLongArray(Int64[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
@@ -68,15 +77,17 @@ namespace Adrenak.AirPeer {
                 Core.EndianCorrection(rB);
                 WriteBytes(rB);
             }
+            return this;
         }
 
-        public void WriteFloat(Single value) {
+        public PayloadWriter WriteFloat(Single value) {
             var bytes = BitConverter.GetBytes(value);
             Core.EndianCorrection(bytes);
             WriteBytes(bytes);
+            return this;
         }
 
-        public void WriteFloatArray(Single[] array) {
+        public PayloadWriter WriteFloatArray(Single[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
@@ -86,15 +97,17 @@ namespace Adrenak.AirPeer {
                 Core.EndianCorrection(rB);
                 WriteBytes(rB);
             }
+            return this;
         }
 
-        public void WriteDouble(double value) {
+        public PayloadWriter WriteDouble(double value) {
             var bytes = BitConverter.GetBytes(value);
             Core.EndianCorrection(bytes);
             WriteBytes(bytes);
+            return this;
         }
 
-        public void WriteDoubleArray(Double[] array) {
+        public PayloadWriter WriteDoubleArray(Double[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
@@ -104,20 +117,23 @@ namespace Adrenak.AirPeer {
                 Core.EndianCorrection(rB);
                 WriteBytes(rB);
             }
+            return this;
         }
 
-        public void WriteChar(char val) {
+        public PayloadWriter WriteChar(char val) {
             WriteBytes(BitConverter.GetBytes(val));
+            return this;
         }
 
-        public void WriteString(string str) {
+        public PayloadWriter WriteString(string str) {
             var strB = Encoding.UTF8.GetBytes(str);
             WriteInt(strB.Length);
             WriteBytes(strB);
+            return this;
         }
 
         // Unity types
-        public void WriteVector3(Vector3 value) {
+        public PayloadWriter WriteVector3(Vector3 value) {
             var xbytes = BitConverter.GetBytes(value.x);
             var ybytes = BitConverter.GetBytes(value.y);
             var zbytes = BitConverter.GetBytes(value.z);
@@ -129,18 +145,22 @@ namespace Adrenak.AirPeer {
             WriteBytes(xbytes);
             WriteBytes(ybytes);
             WriteBytes(zbytes);
+
+            return this;
         }
 
-        public void WriteVector3Array(Vector3[] array) {
+        public PayloadWriter WriteVector3Array(Vector3[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
 
             foreach (var e in array)
                 WriteVector3(e);
+
+            return this;
         }
 
-        public void WriteVector2(Vector2 value) {
+        public PayloadWriter WriteVector2(Vector2 value) {
             var xbytes = BitConverter.GetBytes(value.x);
             var ybytes = BitConverter.GetBytes(value.y);
 
@@ -149,18 +169,22 @@ namespace Adrenak.AirPeer {
 
             WriteBytes(xbytes);
             WriteBytes(ybytes);
+
+            return this;
         }
 
-        public void WriteVector2Array(Vector2[] array) {
+        public PayloadWriter WriteVector2Array(Vector2[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
 
             foreach (var e in array)
                 WriteVector2(e);
+
+            return this;
         }
 
-        public void WriteRect(Rect rect) {
+        public PayloadWriter WriteRect(Rect rect) {
             var xbytes = BitConverter.GetBytes(rect.x);
             var ybytes = BitConverter.GetBytes(rect.y);
             var wbytes = BitConverter.GetBytes(rect.width);
@@ -175,15 +199,19 @@ namespace Adrenak.AirPeer {
             WriteBytes(ybytes);
             WriteBytes(wbytes);
             WriteBytes(hbytes);
+
+            return this;
         }
 
-        public void WriteRectArray(Rect[] array) {
+        public PayloadWriter WriteRectArray(Rect[] array) {
             var lenB = BitConverter.GetBytes(array.Length);
             Core.EndianCorrection(lenB);
             WriteBytes(lenB);
 
             foreach (var e in array)
                 WriteRect(e);
+
+            return this;
         }
 
         public void WriteBytes(byte[] block) {
