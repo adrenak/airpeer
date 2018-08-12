@@ -136,6 +136,37 @@ namespace Adrenak.AirPeer {
             return result;
         }
 
+        public Color32 ReadColor32() {
+            byte r, g, b, a;
+            ReadByte(out r);
+            ReadByte(out g);
+            ReadByte(out b);
+            ReadByte(out a);
+            return new Color32(r, g, b, a);
+        }
+
+        public Color32[] ReadColor32Array() {
+            int len = ReadInt();
+            var result = new Color32[len];
+
+            for (int i = 0; i < result.Length; i++)
+                result[i] = ReadColor32();
+            return result;
+        }
+
+        public Color ReadColor() {
+            return new Color(ReadFloat(), ReadFloat(), ReadFloat(), ReadFloat());
+        }
+
+        public Color[] ReadColorArray() {
+            int len = ReadInt();
+            var result = new Color[len];
+
+            for (int i = 0; i < result.Length; i++)
+                result[i] = ReadColor();
+            return result;
+        }
+
         public byte[] ReadBytes(int length) {
             try {
                 byte[] b = new byte[length];
@@ -145,6 +176,18 @@ namespace Adrenak.AirPeer {
             }
             catch {
                 return null;
+            }
+        }
+
+        public bool ReadByte(out byte result) {
+            try {
+                result = m_Payload[index];
+                index ++;
+                return true;
+            }
+            catch {
+                result = 0;
+                return false;
             }
         }
     }
