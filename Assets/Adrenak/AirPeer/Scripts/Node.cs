@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Byn.Net;
 using UnityEngine;
 using System.Collections.Generic;
@@ -92,7 +93,7 @@ namespace Adrenak.AirPeer {
 
         public void StopServer(Action callback) {
             // WebRTC doesn't tell the client when the server it is connected to
-            // goes offline. So broadcast a reserved event message to everyone
+            // goes offline. So broadcast a reserved event message to everyone, reliably
             Send(Packet.From(CId).WithTag(ReservedTags.ServerDown), true);
             m_StopServerCallback = callback;
             m_Network.StopServer();
@@ -111,9 +112,12 @@ namespace Adrenak.AirPeer {
         public bool Send(Packet packet, bool reliable = false) {
             if (m_Network == null || ConnectionIds == null || ConnectionIds.Count == 0) return false;
 
-            var recipients = packet.Recipients;
-            foreach(var cid in ConnectionIds) 
-                m_Network.SendData(cid, packet.Serialize(), 0, packet.Serialize().Length, reliable);
+			var recipients = ConnectionIds.Select(x => x)
+				.Where(x => packet.Recipients.Contains(x.id));
+
+			var bytes = packet.Serialize();
+			foreach (var cid in recipients) 
+                m_Network.SendData(cid, bytes, 0, bytes.Length, reliable);
             
             return true;
         }
@@ -184,8 +188,8 @@ namespace Adrenak.AirPeer {
         }
 
         void OnNewConnection(NetworkEvent netEvent) {
-            ConnectionId newid = netEvent.ConnectionId;
-            ConnectionIds.Add(newid);
+            ConnectionId newCId = netEvent.ConnectionId;
+            ConnectionIds.Add(newCId);
 
             if (Status == State.Offline) {
                 // Add server as a connection
@@ -194,20 +198,20 @@ namespace Adrenak.AirPeer {
             }
             else if (Status == State.Server) {
                 foreach (var id in ConnectionIds) {
-                    if (id.id == 0 || id.id == newid.id) continue;
+                    if (id.id == 0 || id.id == newCId.id) continue;
 
                     byte[] payload;
 
-                    // Announce the new connection to the old ones
-                    payload = PayloadWriter.New().WriteShort(newid.id).Bytes;
+                    // Announce the new connection to the old ones and vice-versa
+                    payload = PayloadWriter.New().WriteShort(newCId.id).Bytes;
                     Send(Packet.From(this).To(id).With(ReservedTags.ConnectionRegister, payload), true);
 
                     payload = PayloadWriter.New().WriteShort(id.id).Bytes;
-                    Send(Packet.From(this).To(newid).With(ReservedTags.ConnectionRegister, payload), true);
+                    Send(Packet.From(this).To(newCId).With(ReservedTags.ConnectionRegister, payload), true);
                 }
             }
 
-            m_ConnectCallback.TryInvoke(newid);
+            m_ConnectCallback.TryInvoke(newCId);
             m_ConnectCallback = null;
         }
 
@@ -230,7 +234,7 @@ namespace Adrenak.AirPeer {
                 var payload = PayloadWriter.New().WriteShort(dId.id).Bytes;
 
                 // Clients are not aware of each other as this is a star network
-                // Send a reliable reserved message to annouce the disconnection
+                // Send a reliable reserved message to everyone to annouce the disconnection
                 Send(Packet.From(CId).With(ReservedTags.ConnectionDeregister, payload), true);
             }
 
@@ -240,10 +244,8 @@ namespace Adrenak.AirPeer {
 
         void OnMessageReceived(NetworkEvent netEvent, bool reliable) {
             var packet = Packet.Deserialize(netEvent.GetDataAsByteArray());
-            if (packet == null) {
-                Debug.Log("nop");
+            if (packet == null) 
                 return;
-            }
 
             string reservedTag = packet.Tag.StartsWith("reserved") ? packet.Tag : string.Empty;
 
@@ -253,11 +255,13 @@ namespace Adrenak.AirPeer {
 
                 if (Status != State.Server) return;
 
-                // The server tried o broadcast the packet to everyone else listed as recipients
+                // The server tried to broadcast the packet to everyone else listed as recipients
                 foreach(var r in packet.Recipients) {
+					// Forward to everyone except the original sender and the server
                     if (r == CId.id || r == netEvent.ConnectionId.id) continue;
                     Send(Packet.From(CId).To(r).With(ReservedTags.PacketForwarding, packet.Serialize()), true);
                 }
+				return;
             }
 
             // handle reserved messages

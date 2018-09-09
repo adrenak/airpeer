@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.AirPeer {
     public class PayloadReader {
-        public int index;
+        public int index { get; private set; }
         byte[] m_Payload;
 
         public PayloadReader(byte[] payload) {
