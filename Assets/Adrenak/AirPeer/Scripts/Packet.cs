@@ -2,13 +2,14 @@
 using System;
 using System.Text;
 using System.Linq;
+using Adrenak.UniStream;
 
 namespace Adrenak.AirPeer {
     public class Packet {
         public short Sender { get; private set; }
         public short[] Recipients { get; private set; }
         public string Tag { get; private set; }
-        public byte[] Payload { get; private set; }
+        public byte[] Stream { get; private set; }
 
         public bool IsToAll {
             get { return Recipients == null || Recipients.Length == 0; }
@@ -19,14 +20,14 @@ namespace Adrenak.AirPeer {
         }
 
         public bool HasNoPayload {
-            get { return Payload.Length == 0; }
+            get { return Stream.Length == 0; }
         }
 
         Packet() {
             Sender = -1;
             Recipients = new short[0];
             Tag = string.Empty;
-            Payload = new byte[0];
+            Stream = new byte[0];
         }
 
         // ================================================
@@ -98,27 +99,27 @@ namespace Adrenak.AirPeer {
         void SetPayloadString(string payload) {
             if (string.IsNullOrEmpty(payload))
                 payload = string.Empty;
-            Payload = Encoding.UTF8.GetBytes(payload);
+            Stream = Encoding.UTF8.GetBytes(payload);
         }
 
         void SetPayloadBytes(byte[] payload) {
             if (payload == null || payload.Length == 0)
                 payload = new byte[0];
-            Payload = payload;
+            Stream = payload;
         }
 
         // ================================================
         // (DE)SERIALIZATION
         // ================================================
         public static Packet Deserialize(byte[] bytes) {
-            PayloadReader reader = new PayloadReader(bytes);
+            UniStreamReader reader = new UniStreamReader(bytes);
 
             var packet = new Packet();
             try {
                 packet.Sender = reader.ReadShort();
                 packet.Recipients = reader.ReadShortArray();
                 packet.Tag = reader.ReadString();
-                packet.Payload = reader.ReadBytes(bytes.Length - reader.index);
+                packet.Stream = reader.ReadBytes(bytes.Length - reader.Index);
             }
             catch(Exception e) {
                 UnityEngine.Debug.LogError("Packet deserialization error: " + e.Message);
@@ -129,12 +130,12 @@ namespace Adrenak.AirPeer {
         }
 
         public byte[] Serialize() {
-            PayloadWriter writer = PayloadWriter.New();
+            UniStreamWriter writer = new UniStreamWriter();
             try {
                 writer.WriteShort(Sender);
                 writer.WriteShortArray(Recipients);
                 writer.WriteString(Tag);
-                writer.WriteBytes(Payload);
+                writer.WriteBytes(Stream);
             }
             catch (Exception e) {
                 UnityEngine.Debug.LogError("Packet serialization error : " + e.Message);

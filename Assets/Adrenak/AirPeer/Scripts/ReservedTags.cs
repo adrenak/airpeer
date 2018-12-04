@@ -1,8 +1,8 @@
 ﻿namespace Adrenak.AirPeer {
     public struct ReservedTags {
-        public const string ServerDown = "reserved.server.down";
-        public const string ConnectionRegister = "reserved.connection.register";
-        public const string ConnectionDeregister = "reserved.connection.deregister";
+        public const string ServerStopped = "reserved.server.stopped";
+        public const string ClientJoined = "reserved.client.joined";
+        public const string ClientLeft = "reserved.client.left";
         public const string PacketForwarding = "reserved.packet.forwarded";
     }
 }
