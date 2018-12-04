@@ -19,8 +19,8 @@ public class StreamDemo : MonoBehaviour {
 			Debug.Log(cid.id);
 		};
 
-		host.OnGetMessage += delegate (ConnectionId arg1, Packet arg2, bool arg3) {
-            Debug.Log("Host received message from " + arg1.id + " : " + arg2.Stream.ToUTF8String());
+		host.OnGetPacket += delegate (ConnectionId arg1, Packet arg2, bool arg3) {
+            Debug.Log("Host received message from " + arg1.id + " : " + arg2.Payload.ToUTF8String());
         };
         
         host.StartServer("room-name", success => {

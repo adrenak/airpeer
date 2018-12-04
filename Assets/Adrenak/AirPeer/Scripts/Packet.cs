@@ -9,7 +9,7 @@ namespace Adrenak.AirPeer {
         public short Sender { get; private set; }
         public short[] Recipients { get; private set; }
         public string Tag { get; private set; }
-        public byte[] Stream { get; private set; }
+        public byte[] Payload { get; private set; }
 
         public bool IsToAll {
             get { return Recipients == null || Recipients.Length == 0; }
@@ -20,14 +20,14 @@ namespace Adrenak.AirPeer {
         }
 
         public bool HasNoPayload {
-            get { return Stream.Length == 0; }
+            get { return Payload.Length == 0; }
         }
 
         Packet() {
             Sender = -1;
             Recipients = new short[0];
             Tag = string.Empty;
-            Stream = new byte[0];
+            Payload = new byte[0];
         }
 
         // ================================================
@@ -99,13 +99,13 @@ namespace Adrenak.AirPeer {
         void SetPayloadString(string payload) {
             if (string.IsNullOrEmpty(payload))
                 payload = string.Empty;
-            Stream = Encoding.UTF8.GetBytes(payload);
+            Payload = Encoding.UTF8.GetBytes(payload);
         }
 
         void SetPayloadBytes(byte[] payload) {
             if (payload == null || payload.Length == 0)
                 payload = new byte[0];
-            Stream = payload;
+            Payload = payload;
         }
 
         // ================================================
@@ -119,7 +119,7 @@ namespace Adrenak.AirPeer {
                 packet.Sender = reader.ReadShort();
                 packet.Recipients = reader.ReadShortArray();
                 packet.Tag = reader.ReadString();
-                packet.Stream = reader.ReadBytes(bytes.Length - reader.Index);
+                packet.Payload = reader.ReadBytes(bytes.Length - reader.Index);
             }
             catch(Exception e) {
                 UnityEngine.Debug.LogError("Packet deserialization error: " + e.Message);
@@ -135,7 +135,7 @@ namespace Adrenak.AirPeer {
                 writer.WriteShort(Sender);
                 writer.WriteShortArray(Recipients);
                 writer.WriteString(Tag);
-                writer.WriteBytes(Stream);
+                writer.WriteBytes(Payload);
             }
             catch (Exception e) {
                 UnityEngine.Debug.LogError("Packet serialization error : " + e.Message);
@@ -143,5 +143,17 @@ namespace Adrenak.AirPeer {
 
             return writer.Bytes;
         }
-    }
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder("Packet:")
+				.Append("Sender=").Append(Sender).Append("\n")
+				.Append("Recipients=").Append("\n");
+			foreach (var r in Recipients)
+				sb.Append(r).Append(",");
+			sb.Append("\n");
+			sb.Append("Tag=").Append(Tag).Append("\n")
+				.Append("PayloadLength=").Append(Payload.Length);
+			return sb.ToString();
+		}
+	}
 }

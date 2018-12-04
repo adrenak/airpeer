@@ -40,12 +40,12 @@ namespace Adrenak.AirPeer {
 		/// <summary>
 		/// Fired when a packet has been received by the node
 		/// </summary>
-		public event Action<ConnectionId, Packet, bool> OnGetMessage;
+		public event Action<ConnectionId, Packet, bool> OnGetPacket;
 
 		/// <summary>
 		/// Fired when a raw message (byte array) has been received by the node
 		/// </summary>
-		public event Action<ConnectionId, byte[], bool> OnGetRawMessage;
+		public event Action<ConnectionId, byte[], bool> OnGetBytes;
 
 		IBasicNetwork m_Network;
 		public List<ConnectionId> ConnectionIds { get; private set; }
@@ -348,7 +348,7 @@ namespace Adrenak.AirPeer {
 			// If packet is null, it is a "raw" byte array message. 
 			// Forward it to everyone
 			if (packet == null) {
-				OnGetRawMessage.TryInvoke(netEvent.ConnectionId, bytes, reliable);
+				OnGetBytes.TryInvoke(netEvent.ConnectionId, bytes, reliable);
 				foreach (var r in ConnectionIds) {
 					// Forward to everyone except the original sender and the server
 					if (r == CId || r == netEvent.ConnectionId) continue;
@@ -362,7 +362,7 @@ namespace Adrenak.AirPeer {
 
 			// If is not a reserved message
 			if (reservedTag == string.Empty) {
-				OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
+				OnGetPacket.TryInvoke(netEvent.ConnectionId, packet, reliable);
 
 				if (NodeState != State.Server) return;
 
@@ -389,7 +389,7 @@ namespace Adrenak.AirPeer {
 					OnLeave.TryInvoke(netEvent.ConnectionId);
 					break;
 				case ReservedTags.PacketForwarding:
-					OnGetMessage.TryInvoke(netEvent.ConnectionId, packet, reliable);
+					OnGetPacket.TryInvoke(netEvent.ConnectionId, packet, reliable);
 					break;
 			}
 		}
