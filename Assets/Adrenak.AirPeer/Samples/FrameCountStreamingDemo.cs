@@ -2,7 +2,10 @@
 using UnityEngine.UI;
 
 namespace Adrenak.AirPeer.Samples {
-    // Used to demo 'streaming' of data on a per frame basis
+    /// <summary>
+    /// A demo script that shows a constant stream of data sent from
+    /// the server to all the clients.
+    /// </summary>
     public class FrameCountStreamingDemo : MonoBehaviour {
         public string signalingServer = "ws://localhost:12776/";
         public InputField inputField;
@@ -11,15 +14,7 @@ namespace Adrenak.AirPeer.Samples {
         APNode node;
 
         private void Start() {
-            node = new APNode(signalingServer);//, new[]{
-            //"stun.l.google.com:19302",
-            //    "stun1.l.google.com:19302",
-            //    "stun2.l.google.com:19302",
-            //    "stun3.l.google.com:19302",
-            //    "stun4.l.google.com:19302",
-            //    "stun.vivox.com:3478",
-            //    "stun.freecall.com:3478"
-            //});
+            node = new APNode(signalingServer);
 
             node.OnServerStartSuccess += () => {
                 msg1.text = "Server started";

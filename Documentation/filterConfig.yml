@@ -1,0 +1,10 @@
+apiRules:
+- include:
+    uidRegex: ^Adrenak.AirPeer
+    type: Namespace
+- exclude:
+    uidRegex: ^Adrenak.AirPeer.Samples
+    type: Namespace
+- exclude:
+    uidRegex: .*
+    type: Namespace
