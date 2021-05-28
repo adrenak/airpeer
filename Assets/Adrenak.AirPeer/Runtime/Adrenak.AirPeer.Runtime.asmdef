@@ -1,0 +1,14 @@
+{
+    "name": "Adrenak.AirPeer.Runtime",
+    "references": [
+        "Adrenak.AirPeer.WebRTCNetworkPlugin"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

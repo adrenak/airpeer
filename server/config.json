@@ -10,32 +10,11 @@
         "ssl_cert_file": "ssl.crt"
     },
     "maxPayload": 
-        1048576,
+        16777216,
     "apps": [
         {
-            "name": "Test",
-            "path": "/"
-        },
-        {
-            "name": "ChatApp",
-            "path": "/chatapp"
-        },
-        {
-            "name": "CallApp",
-            "path": "/callapp"
-        },
-        {
-            "name": "ConferenceApp",
-            "path": "/conferenceapp",
-            "address_sharing": true
-        },
-        {
-            "name": "UnitTests",
-            "path": "/test"
-        },
-        {
-            "name": "UnitTestsAddressSharing",
-            "path": "/testshared",
+            "name": "Main",
+            "path": "/",
             "address_sharing": true
         }
     ]

@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Adrenak.AirPeer/Samples/FrameCountStreamingDemo.unity
+    guid: 9120acb0d55153341a9c1a878c06ad6d
+  m_configObjects: {}
