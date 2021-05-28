@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/adrenak/AirPeer/compare/v1.1.0...v1.1.1) (2021-05-28)
+
+
+### Bug Fixes
+
+* Remove Documentation/manual/toc.yml ([06e1219](https://github.com/adrenak/AirPeer/commit/06e12193e44d22ba9c5b170624ea9c217d7e1584))
+
 # [1.1.0](https://github.com/adrenak/AirPeer/compare/v1.0.0...v1.1.0) (2021-05-28)
 
 
