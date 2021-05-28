@@ -9,19 +9,38 @@ namespace Adrenak.AirPeer {
     /// An AirPeer Node. Can serve as a server and a client.
     /// </summary>
     public class APNode {
+        /// <summary>
+        /// Describes the different modes that an <see cref="APNode"/> can be on
+        /// </summary>
         public enum Mode {
+            /// <summary>
+            /// State when the node is neither a server (i.e. hosting a network with or
+            /// without clients) or a client (connected to a server and part of a network).
+            /// </summary>
             Idle,
+
+            /// <summary>
+            /// State when the node is hosting a network at an address. May or may not 
+            /// have clients.
+            /// </summary>
             Server,
+
+            /// <summary>
+            /// State when the node is connected to a server node and part of a network.
+            /// </summary>
             Client
         }
 
         /// <summary>
-        /// the current mode of the node
+        /// The current mode of the node. The <see cref="Mode"/> changes to <see cref="Mode.Idle"/>
+        /// in error scenarios too such as when the node fails to become a server, fails to connect
+        /// to a server. Or when the server is stopped or the client is disconnected.
         /// </summary>
         public Mode CurrentMode { get; private set; }
 
         /// <summary>
-        /// The name of the server the node is hosting/connected to
+        /// The address of the network the node is i) hosting as a server or ii) connected to
+        /// a as a client
         /// </summary>
         public string Address { get; private set; }
 
@@ -31,23 +50,23 @@ namespace Adrenak.AirPeer {
         public short ID { get; private set; } = -1;
 
         /// <summary>
-        /// The IDs of the peers of this node
+        /// The IDs of other nodes on this network (not including own ID)
         /// </summary>
-        public List<short> Peers = new List<short>();
+        public List<short> Peers { get; private set; } = new List<short>();
 
         // Common
         /// <summary>
-        /// Fired when another client joins the network
+        /// Fired when a new client joins the network
         /// </summary>
         public event Action<short> OnClientJoined;
 
         /// <summary>
-        /// Fired when another client leaves the network
+        /// Fired when a client leaves the network
         /// </summary>
         public event Action<short> OnClientLeft;
 
         /// <summary>
-        /// Fired when the node is assigned an ID
+        /// Fired when this node is assigned an ID
         /// </summary>
         public event Action<short> OnReceiveID;
 
@@ -98,10 +117,9 @@ namespace Adrenak.AirPeer {
         ConnectionId serverCID = ConnectionId.INVALID;
 
         /// <summary>
-        /// Constructs a peer with the given the signalling server and with a default list of ICE servers
+        /// Constructs a <see cref="APNode"/> with the given the signaling server URL and with a default list of ICE servers.
         /// </summary>
         /// <param name="signalingServer">The URL of the signalling server</param>
-        /// <param name="iceServer">List of URLs of ICE servers</param>
         public APNode(string signalingServer) : this(signalingServer, new[] {
             "stun.l.google.com:19302",
             "stun1.l.google.com:19302",
@@ -113,7 +131,7 @@ namespace Adrenak.AirPeer {
         }) { }
 
         /// <summary>
-        /// Constructs a peer with the given the signalling server and a list of ICE servers
+        /// Constructs a node with the given the signaling server and a list of ICE servers
         /// </summary>
         /// <param name="signalingServer">The URL of the signalling server</param>
         /// <param name="iceServer">List of URLs of ICE servers</param>
@@ -136,7 +154,7 @@ namespace Adrenak.AirPeer {
         // API
         // ================================================
         /// <summary>
-        /// Starts the server with a name
+        /// Starts the server using the given address.
         /// </summary>
         public void StartServer(string address) {
             if (CurrentMode == Mode.Idle) {
@@ -172,36 +190,36 @@ namespace Adrenak.AirPeer {
         }
 
         /// <summary>
-        /// Sends a packet message to a single recipient
+        /// Sends a packet message to a recipient peer
         /// </summary>
-        /// <param name="recipient">Recipient ID</param>
+        /// <param name="recipient">Recipient peer ID</param>
         /// <param name="packet">The packet containing the message</param>
         /// <param name="reliable">Whether the message is reliable or not</param>
         public void SendPacket(short recipient, Packet packet, bool reliable = false) =>
             SendPacket(new List<short> { recipient }, packet, reliable);
 
         /// <summary>
-        /// Sends a packet message to several recipients
+        /// Sends a packet message to several recipient peers
         /// </summary>
-        /// <param name="recipients">Recipient IDs</param>
+        /// <param name="recipients">Recipient peer IDs</param>
         /// <param name="packet">The packet containing the message</param>
         /// <param name="reliable">Whether the message is reliable or not</param>
         public void SendPacket(List<short> recipients, Packet packet, bool reliable = false) =>
             SendRaw(recipients, packet.Serialize(), reliable);
 
         /// <summary>
-        /// Sends a byte array to a single recipient
+        /// Sends a byte array to a single recipient peer
         /// </summary>
-        /// <param name="recipient">The recipient ID</param>
+        /// <param name="recipient">The recipient peer ID</param>
         /// <param name="bytes">The byte array to send</param>
         /// <param name="reliable">Whether the message is reliable or not</param>
         public void SendRaw(short recipient, byte[] bytes, bool reliable = false) =>
             SendRaw(new List<short> { recipient }, bytes, reliable);
 
         /// <summary>
-        /// Sends a byte array to several recipients
+        /// Sends a byte array to several recipient peers
         /// </summary>
-        /// <param name="recipients">A list of the recipient IDs</param>
+        /// <param name="recipients">A list of the recipient peer IDs</param>
         /// <param name="bytes">The byte array to send</param>
         /// <param name="reliable">Whether the message is reliable or not</param>
         public void SendRaw(List<short> recipients, byte[] bytes, bool reliable = false) {
