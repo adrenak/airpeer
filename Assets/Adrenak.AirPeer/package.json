@@ -1,6 +1,6 @@
 {
 	"name": "com.adrenak.airpeer",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"displayName": "Adrenak.AirPeer",
 	"description": "A WebRTC based networking plugin for Unity",
 	"unity": "2018.4",
