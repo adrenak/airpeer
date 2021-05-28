@@ -1,0 +1,17 @@
+{
+	"name": "com.adrenak.airpeer",
+	"version": "0.0.0",
+	"displayName": "Adrenak.AirPeer",
+	"description": "A WebRTC based networking plugin for Unity",
+	"unity": "2018.4",
+	"author": {
+		"name": "Vatsal Ambastha",
+		"email": "ambastha.vatsal@gmail.com",
+		"url": "www.vatsalambastha.com"
+	},
+	"license": "MIT",
+	"keywords": [ "Peer To Peer", "WebRTC", "P2P", "Networking" ],
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	}
+}
