@@ -1,0 +1,291 @@
+{
+  "sitemap": {
+    "fileOptions": {
+      "api/*": {
+        "baseUrl": "https://normanderwan.github.io/AirPeer/",
+        "changefreq": "daily"
+      }
+    },
+    "baseUrl": "https://normanderwan.github.io/AirPeer/",
+    "changefreq": "weekly"
+  },
+  "homepages": [],
+  "source_base_path": "D:/a/AirPeer/AirPeer/Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      },
+      "is_incremental": false
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.APNetwork.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.APNetwork.html",
+          "hash": "QHRfmAdmLYoqhbp2E7RRuimpcvlWoYvVYbZuLgrU+AM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.APNode.Mode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.APNode.Mode.html",
+          "hash": "rFW70eBDTBf7x0BzRZlPbsa8U3gyinkjVkd29O20D7o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.APNode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.APNode.html",
+          "hash": "f5QZQMUwEBk8T1OucTa/aeJeGYPpM8NCy70CIMYS06U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.BytesReader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.BytesReader.html",
+          "hash": "sW7sLXt49BCHo2bCLCEHiyXzRJPcCGyfq9MOQjlPZvU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.BytesWriter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.BytesWriter.html",
+          "hash": "d+PDwXmTdQry/dHXfJLIT7hGJUbuSdlXwTWQrQXCQjU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.EndianUtility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.EndianUtility.html",
+          "hash": "oaQVG3RWXkU2Cc8roJNbFk1NgNMCwVJ+GLcB+EBhpek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Extensions.html",
+          "hash": "UP5lYym2huMZ//pgx7bH57ACc5ivFcvSuiIIKIBuzKw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Message.html",
+          "hash": "ahYaWieW1BAnfu5AcQ+gNMPndOf+xkeMlXvXayYIv+0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Packet.ReservedTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Packet.ReservedTags.html",
+          "hash": "mrMS6YxppXs1BrvOmg+JRlOnFahUSPMpMj9RG41c/rs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Packet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Packet.html",
+          "hash": "SJIaZOpl6dkT+2ZTCtCFGMYvXxxhV2flam1AoxOWZ3k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Samples.APNodeDemo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Samples.APNodeDemo.html",
+          "hash": "zgNcNGEpNK82Q1AWSMsZ3NPs4ncJk200DBm7q1A+QTo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Samples.BytesReaderWriterDemo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Samples.BytesReaderWriterDemo.html",
+          "hash": "oA5/M5bjEYhGT5TxBGRlYjwv881UD/tdF8ythTYIe7o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Samples.FrameCountStreamingDemo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Samples.FrameCountStreamingDemo.html",
+          "hash": "yVpac34wGJiFpXcfoDh2TqepKvIFT2tZq4qRwvgIxyE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.Samples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.Samples.html",
+          "hash": "Kd0s3Mhqnj6sAs4Qadi2YV38CYEvcS8fDEUvL4fIcNE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Adrenak.AirPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Adrenak.AirPeer.html",
+          "hash": "fLkMYfESIYT7UoVT5hMVVzRx15k3fgh2EAjZXGjpIvg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "+AK8Z4C793vbPFLM2c77sHCCiI0TTl6pcE8FaHccBcU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "8cpOCwZn2Vkeriv4FDIEStd1Xf4CmXQbUWyhtp0IdnQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "LTUWUucVvlEN6D2NUO9nhpEKZJhmoZGVRdExOygK95o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 1,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 15,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
