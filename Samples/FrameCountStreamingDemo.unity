@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0358f382e921a0d4d9cb07ec6cce6d0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signallingServer: ws://localhost:12776/
+  signalingServer: ws://167.71.17.13:11000/
   inputField: {fileID: 1718389428}
   msg1: {fileID: 706204770}
   msg2: {fileID: 1695119001}

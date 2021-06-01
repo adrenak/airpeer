@@ -57,7 +57,8 @@ namespace Adrenak.AirPeer.Samples {
         void Update() {
             if (node != null) {
                 if (node.CurrentMode == APNode.Mode.Server) {
-                    node.SendPacket(node.Peers, new Packet().WithPayload(Time.frameCount.GetBytes()));
+                    node.SendPacket(node.Peers, new Packet()
+                    .WithPayload(System.BitConverter.GetBytes(Time.frameCount)));
                     msg2.text = "Sending " + Time.frameCount.ToString();
                 }
             }

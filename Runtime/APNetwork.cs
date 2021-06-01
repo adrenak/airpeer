@@ -9,7 +9,7 @@ namespace Adrenak.AirPeer {
     /// <summary>
     /// Provides access to the WebRTC Network Plugin
     /// </summary>
-    public class APNetwork : MonoBehaviour {
+    public class APNetwork : MonoBehaviour, IDisposable {
         /// <summary>
         /// Fired when the server successfully starts
         /// </summary>
@@ -26,7 +26,8 @@ namespace Adrenak.AirPeer {
         public event Action<NetworkEvent> OnServerStopped;
 
         /// <summary>
-        /// Fired when a new connection is formed. Called on both the server and client
+        /// Fired when a new connection is formed. 
+        /// Called on both the server and client
         /// </summary>
         public event Action<NetworkEvent> OnNewConnection;
 
@@ -36,7 +37,7 @@ namespace Adrenak.AirPeer {
         public event Action<NetworkEvent> OnConnectionFailed;
 
         /// <summary>
-        /// Fired when a connection is closed. Called on both the server and client
+        /// Fired when a connection is closed. Called on both server and client
         /// </summary>
         public event Action<NetworkEvent> OnDisconnection;
 
@@ -52,10 +53,19 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Creates a new APNetwork instance
         /// </summary>
-        /// <param name="signalingServer">The URL of the signaling server</param>
+        /// <param name="signalingServer">The signaling server URL</param>
         /// <param name="iceServers">List of ICE server URLs</param>
-        public static APNetwork New(string signalingServer, string[] iceServers) {
-            var go = new GameObject("Peer Network [" + signalingServer + "]");
+        /// <param name="gameObjectName">
+        /// Optional: 
+        /// Name of the GameObject hosting the new <see cref="APNetwork"/>
+        /// </param>
+        public static APNetwork New(
+            string signalingServer,
+            string[] iceServers,
+            string gameObjectName = null
+        ) {
+            var name = gameObjectName ?? $"APNetwork [{signalingServer}]";
+            var go = new GameObject(name);
             DontDestroyOnLoad(go);
             var instance = go.AddComponent<APNetwork>();
 
@@ -73,10 +83,19 @@ namespace Adrenak.AirPeer {
         }
 
         /// <summary>
+        /// Disposes the internal WebRTC network,
+        /// then destroys this <see cref="APNetwork"/> instance 
+        /// </summary>
+        public void Dispose() {
+            network.Dispose();
+            Destroy(gameObject);
+        }
+
+        /// <summary>
         /// Starts a server for the given address
         /// </summary>
-        /// <param name="address">Address at which the server will start</param>
-        public void StartServer(string address) => network.StartServer(address);
+        /// <param name="addr">Address at which the server will run</param>
+        public void StartServer(string addr) => network.StartServer(addr);
 
         /// <summary>
         /// Stops the server (if it's running)
@@ -86,7 +105,7 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Connects to a server using the address
         /// </summary>
-        /// <param name="address">The address at which the server is running</param>
+        /// <param name="address">Address of the server to connect to</param>
         public void Connect(string address) => network.Connect(address);
 
         /// <summary>
@@ -98,13 +117,14 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Sends data over a connection
         /// </summary>
-        /// <param name="id">The Id of the connection over which data is send</param>
+        /// <param name="id">The Id of the connection to send data to</param>
         /// <param name="data">The data to be sent</param>
         /// <param name="offset">Offset from the byte array data</param>
-        /// <param name="length">Length of the data starting from offset in data</param>
-        /// <param name="reliable">Whether data is sent UDP or TCP style</param>
-        public void SendData(ConnectionId id, byte[] data, int offset, int length, bool reliable) =>
-            network.SendData(id, data, offset, length, reliable);
+        /// <param name="len">Length of the data starting</param>
+        /// <param name="reliable">Whether data is sent UDP/TCP style</param>
+        public void SendData
+        (ConnectionId id, byte[] data, int offset, int len, bool reliable) =>
+            network.SendData(id, data, offset, len, reliable);
 
         void Update() {
             if (network != null) {
@@ -114,7 +134,7 @@ namespace Adrenak.AirPeer {
                 // Dequeue while we have something
                 do {
                     network.Dequeue(out NetworkEvent e);
-                    if(e.Type != NetEventType.Invalid)
+                    if (e.Type != NetEventType.Invalid)
                         ProcessNetworkEvent(e);
                 } while (network.Peek(out NetworkEvent e2));
             }
