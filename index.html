@@ -73,21 +73,94 @@
 <h1 id="airpeer">AirPeer</h1>
 
 <p>A WebRTC based networking plugin for Unity3D.</p>
-<h2 id="intro">Intro</h2>
-<p> AirPeer allows Unity applications to communicate in a peer to peer manner using <a href="https://webrtc.org/">WebRTC technology</a>.</p>
-<p>Built on top of <a href="https://www.because-why-not.com/webrtc/">Christoph Kutza&#39;s WebRTC project</a> with added features such as</p>
+<p>AirPeer allows Unity applications to communicate in a peer to peer manner using <a href="https://webrtc.org/">WebRTC technology</a>.</p>
+<p>Built on top of <a href="https://www.because-why-not.com/">Christoph Kutza&#39;s</a> WebRTC Network project with added features such as</p>
 <ul>
-<li>Differentiating peers into server and clients</li>
-<li>For client to client communication (via server)</li>
-<li>Event based API</li>
-<li>Message (de)serialization features</li>
+<li>Differentiating peers into server and clients to form star networks with server at the center.</li>
+<li>For client to client communication (via server).</li>
+<li>Event based API.</li>
+<li>Message (de)serialization features.</li>
 </ul>
+<hr>
+<h2 id="installation">Installation</h2>
+<p>AirPeer is distributed as a UPM package. There are many ways to install AirPeer. Here are 5 of them:
+<details><p>
+<summary>Click to see more.</summary>  
+
+<ol>
+<li><p>Packages&gt;manifest.json file </p>
+<ul>
+<li>Easiest method for most people.  </li>
+<li>Ensure you have NPMJS registry in manifest.json inside the <code>&quot;scopedRegistries&quot;</code> object and under the scopes <code>com.adrenak.airpeer</code> is added. Then add the package as a project dependency. Make sure <code>&quot;dependencies&quot;</code> array has this the package name. If done right your manifest.json should resemble this. Substitute <code>x.x.x</code> with the version of AirPeer that you want in your project :
+<code>{
+      &quot;dependencies&quot;: {
+          &quot;com.adrenak.airpeer&quot;: &quot;x.x.x&quot;
+          &lt;&lt;other dependencies of your project&gt;&gt;
+      },
+      &quot;scopedRegistries&quot;: [
+          {
+              &quot;name&quot;: &quot;npmjs&quot;,
+              &quot;url&quot;: &quot;https://registry.npmjs.com&quot;,
+              &quot;scopes&quot;: [
+                  &quot;com.adrenak.airpeer&quot;,
+                  &lt;&lt;other packages from npmjs registry&gt;&gt;
+              ]
+          },
+          &lt;&lt;Other scoped registries, if any&gt;&gt;
+      ]
+  }</code></li>
+</ul>
+</li>
+<li><p>Git clone method. Clone this repository. Then do either of these</p>
+<ul>
+<li>Copy Assets/Adrenak.AirPeer into your projects Assets or Packages folder </li>
+<li><p>Checkout the upm branch in the cloned repository using <code>git checkout upm</code>. Go to Unity&gt;Window&gt;Package Manager. Click on the + button in the top left corner&gt;Add package from disk... and select Assets/Adrenak.AirPeer/package.json inside the cloned repository.  </p>
+<p>This approach also allows you to change the version of AirPeer by doing a <code>git checkout</code> inside the cloned repository to a specific version and also lets you fetch the latest updates using <code>git pull origin upm</code>. </p>
+<p>If  you know basic git and don&#39;t know much about upm, this is a good approach.</p>
+</li>
+</ul>
+</li>
+<li><p>OpenUPM:  </p>
+<ul>
+<li><p>AirPeer is available on <a href="https://npmjs.com/package/com.adrenak.airpeer">NPM</a> and <a href="https://openupm.com/packages/com.adrenak.airpeer.html">OpenUPM</a> registries. If you&#39;re using the OpenUPM CLI type any of these in the terminal:  </p>
+<ul>
+<li><code>openupm add com.adrenak.airpeer</code> which will install it using the OpenUPM registry  </li>
+<li><code>openupm add --registry https://registry.npmjs.com com.adrenak.airpeer</code> which will install it using the NPM registry.  </li>
+</ul>
+<p>If you know UPM and use OpenUPM CLI, this method is the best.</p>
+</li>
+</ul>
+</li>
+<li><p>Via Git URL in Unity Package Manager:  </p>
+<ul>
+<li>Press the + button in package manager and add the URL <a href="https://github.com/adrenak/airpeer.git#upm">https://github.com/adrenak/airpeer.git#upm</a>.</li>
+</ul>
+</li>
+<li><p>Github releases:</p>
+<ul>
+<li>Go to <a href="https://github.com/adrenak/airpeer/tags">https://github.com/adrenak/airpeer/tags</a> and click on any <code>upm/x.x.x</code> where <code>x.x.x</code> is the version of AirPeer. You can download the zip and extract inside your projects Packages folder.</li>
+</ul>
+</li>
+</ol>
+<p></details>  </p>
+<hr>
+<h2 id="documentation">Documentation</h2>
+<p>Manual and tutorials is WIP. In the meantime, please refer to codedoc generated documentation <a href="http://www.vatsalambastha.com/airpeer">here</a>.</p>
+<hr>
+<h2 id="samples">Samples</h2>
+<p>AirPeers comes with a couple of handy samples that show how you can connect to a WebRTC network and exchange messages. To import samples, go to Window&gt;Package Manager. Find <code>Adrenak.AirPeer</code> and install Samples from the options on the right hand side of the window.</p>
+<hr>
 <h2 id="signalling-server">Signalling Server</h2>
-<p>A directory called <code>server</code> in the repository root contains a node implementation for a signalling server. This can be run using NPM. Find the README inside the folder.</p>
-<h2 id="parellsync">ParellSync</h2>
-<p>Includes <a href="https://github.com/VeriorPies/ParrelSync">ParellSync</a> to help test within the editor.</p>
+<p>A Signalling server implementation can be found in the <a href="https://github.com/adrenak/airsignal">AirSignal</a> repository.</p>
+<p>The samples in the AirPeer repository use an IP:Port that I am hosting, but it is neither garunteed to be online nor secure. </p>
+<p>It is HIGHLY advised that you run AirSignal (or your own WebRTC signalling server implementation) on your own server and don&#39;t rely on my server. AirSignal can also be run locally localhost for easier testing.</p>
+<hr>
+<h2 id="editor-testing">Editor testing</h2>
+<p>Use <a href="https://github.com/VeriorPies/ParrelSync">ParellSync</a> to use the samples within the Unity editor. </p>
+<hr>
 <h2 id="contact">Contact</h2>
-<p><a href="https://www.github.com/adrenak">@github</a><br><a href="http://www.vatsalambastha.com">@www</a></p>
+<p>This repository is made by Vatsal Ambastha and is under the MIT license. Feel free to get in touch for helping support this project or commercial consultation/development for your own projects.</p>
+<p><a href="https://www.github.com/adrenak">@github</a>  <a href="http://www.vatsalambastha.com">@website</a>  <a href="https://www.twitter.com/vatsalambastha">@twitter</a>  </p>
 </article>
           </div>
           
