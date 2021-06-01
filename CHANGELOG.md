@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/adrenak/airpeer/compare/v1.1.1...v1.2.0) (2021-06-01)
+
+
+### Features
+
+* IDisposable implemented on APNetwork and APNode ([c7656b4](https://github.com/adrenak/airpeer/commit/c7656b4634bb5a3c3075af23ed16c63306f383f0))
+
 ## [1.1.1](https://github.com/adrenak/AirPeer/compare/v1.1.0...v1.1.1) (2021-05-28)
 
 
