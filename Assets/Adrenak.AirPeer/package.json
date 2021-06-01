@@ -16,6 +16,13 @@
 		"P2P",
 		"Networking"
 	],
+	"samples": [
+        {
+            "displayName": "All samples",
+            "description": "",
+            "path": "Samples~/"
+        }
+    ],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org"
 	}
