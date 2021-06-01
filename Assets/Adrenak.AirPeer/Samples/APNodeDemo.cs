@@ -15,35 +15,43 @@ namespace Adrenak.AirPeer.Samples {
             });
 
             node.OnServerStartSuccess += () =>
-                Debug.Log("Server started.");
+                msg = ("Server started.");
 
             node.OnServerStartFailure += ex =>
-                Debug.LogError("Server could not start " + ex);
+                msg = ("Server could not start " + ex);
 
             node.OnServerStop += () =>
-                Debug.Log("Server stopped");
+                msg = ("Server stopped");
 
 
             node.OnConnected += () =>
-                Debug.Log("Connected");
+                msg = ("Connected");
 
             node.OnDisconnected += () =>
-                Debug.Log("Disconnected from server");
+                msg = ("Disconnected from server");
 
             node.OnConnectionFailed += ex =>
-                Debug.LogError("Could not connect to server " + ex);
+                msg = ("Could not connect to server " + ex);
 
+
+            node.OnClientJoined += id =>
+                msg = "Client #" + id + " connected";
+
+            node.OnClientLeft += id =>
+                msg = "Client #" + id + " left";
+                
 
             node.OnReceiveID += id =>
-                Debug.Log("Assigned ID " + id);
+                msg = ("Assigned ID " + id);
 
             node.OnPacketReceived += (arg1, arg2) =>
-                Debug.Log("Message received " + arg1 + " : " + arg2.Tag);
+                msg = ("Message received from peer #" + arg1 + " : " + arg2.Tag);
 
             node.OnBytesReceived += (id, bytes) =>
-                Debug.Log("Message received " + id + " : " + bytes.Length);
+                msg = ("Message received from peer #" + id + " : " + bytes.Length);
         }
 
+        string msg;
         string address = "address";
         string textInput;
 
@@ -56,6 +64,7 @@ namespace Adrenak.AirPeer.Samples {
                 return value;
             }
 
+            GUI.Label(new Rect(0, getHeight(), 4000, height), msg);
             var label = node.CurrentMode == APNode.Mode.Idle ? "Not Connected. Mode" : (node.CurrentMode == APNode.Mode.Client ? "I am Client" : "I am Server") + " ID : " + node.ID;
 
             GUI.Label(new Rect(0, getHeight(), 400, height), label);
@@ -80,10 +89,11 @@ namespace Adrenak.AirPeer.Samples {
             }
 
             if (GUI.Button(new Rect(0, getHeight(), 400, height), "Print Peers")) {
-                var str = "PEERS : ";
+                var str = "PEERS : [";
                 foreach (var p in node.Peers)
                     str += p + "  ";
-                Debug.Log(str);
+                str += "]";
+                msg = (str);
             }
         }
     }

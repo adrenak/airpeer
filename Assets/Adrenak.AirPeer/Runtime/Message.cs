@@ -24,8 +24,10 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Constructs a <see cref="Message"/> from a byte array
         /// </summary>
-        /// <param name="bytes">The byte array representing the <see cref="Message"/></param>
-        /// <returns><see cref="Message"/> instance if deserialization was successful or null</returns>
+        /// <param name="bytes">The byte array representing the data</param>
+        /// <returns>
+        /// <see cref="Message"/> if deserialization was successful, else null
+        /// </returns>
         public static Message Deserialize(byte[] bytes) {
             BytesReader reader = new BytesReader(bytes);
 
@@ -38,7 +40,8 @@ namespace Adrenak.AirPeer {
                     message.bytes = reader.ReadByteArray();
                 }
                 catch (Exception e) {
-                    UnityEngine.Debug.LogError("Message deserialization error: " + e.Message);
+                    var msg = "Message deserialization error: " + e.Message;
+                    UnityEngine.Debug.LogError(msg);
                     message = null;
                 }
             }
@@ -51,8 +54,9 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Serializes <see cref="Message"/> instance into a byte array 
         /// </summary>
-        /// <returns>Returns byte array if successful else throws exception</returns>
+        /// <returns>Returns byte array if successful else exception</returns>
         public byte[] Serialize() {
+            
             BytesWriter writer = new BytesWriter();
             try {
                 writer.WriteString("MESSAGE_DATA");
@@ -62,7 +66,8 @@ namespace Adrenak.AirPeer {
                 return writer.Bytes;
             }
             catch (Exception e) {
-                UnityEngine.Debug.LogError("Message serialization error : " + e.Message);
+                var msg = "Message serialization error : " + e.Message;
+                UnityEngine.Debug.LogError(msg);
                 throw;
             }
         }
@@ -72,12 +77,12 @@ namespace Adrenak.AirPeer {
         /// </summary>
         /// <returns>The string representation</returns>
         public override string ToString() {
-            StringBuilder sb = new StringBuilder("Packet:");
-            sb.Append("\n");
+            StringBuilder sb = new StringBuilder("Message:\n");
             sb.Append("sender=").Append(sender).Append("\n");
-            sb.Append("recipients={").Append(string.Join(", ", recipients)).Append("}").Append("\n");
-            sb.Append("bytesLen=").Append(bytes.Length.ToString()).Append("\n");
-            sb.Append("bytes=").Append(bytes);
+            var recipientsJoined = string.Join(", ", recipients);
+            sb.Append("recipients={").Append(recipientsJoined).Append("}\n");
+            sb.Append("bytesLen=").Append(bytes.Length).Append("\n");
+            sb.Append("bytes=").Append(BitConverter.ToString(bytes));
             return sb.ToString();
         }
     }

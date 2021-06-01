@@ -50,19 +50,19 @@ namespace Adrenak.AirPeer {
         // OBJECT BUILDER
         // ================================================
         /// <summary>
-        /// A builder method that allows setting tag and payload
+        /// A builder method that allows setting tag and string payload
         /// </summary>
         /// <param name="tag">The tag to be set</param>
-        /// <param name="payload">The payload data to be set in the form of a string</param>
+        /// <param name="payload">The string to be set as payload</param>
         /// <returns>Returns itself for builder method chaining</returns>
         public Packet With(string tag, string payload) =>
             WithTag(tag).WithPayload(payload);
 
         /// <summary>
-        /// A builder method that allows setting tag and pyaload
+        /// A builder method that allows setting tag and byte array payload
         /// </summary>
         /// <param name="tag">The tag to be set</param>
-        /// <param name="payload">THe payload data to be set in the form of a byte array</param>
+        /// <param name="payload">The byte array to be set as payload</param>
         /// <returns>Returns itself for builder method chaining</returns>
         public Packet With(string tag, byte[] payload) =>
             WithTag(tag).WithPayload(payload);
@@ -78,9 +78,9 @@ namespace Adrenak.AirPeer {
         }
 
         /// <summary>
-        /// A builder method that allows setting the payload
+        /// A builder method that allows setting the string payload
         /// </summary>
-        /// <param name="payload">The payload to be set in the form of a string</param>
+        /// <param name="payload">The string to be set as payload</param>
         /// <returns>Returns itself for builder method chaining</returns>
         public Packet WithPayload(string payload) {
             SetPayloadString(payload);
@@ -88,9 +88,9 @@ namespace Adrenak.AirPeer {
         }
 
         /// <summary>
-        /// A builder method that allows setting the payload
+        /// A builder method that allows setting the byte array payload
         /// </summary>
-        /// <param name="payload">The payload to be set in the form of a byte array</param>
+        /// <param name="payload">The byte array to be set as payload</param>
         /// <returns>Returns itself for builder method chaining</returns>
         public Packet WithPayload(byte[] payload) {
             SetPayloadBytes(payload);
@@ -118,8 +118,10 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Constructs a <see cref="Packet"/> from a byte array
         /// </summary>
-        /// <param name="bytes">The byte array representing the <see cref="Packet"/></param>
-        /// <returns><see cref="Packet"/> instance if deserialization was successful or null</returns>
+        /// <param name="bytes"><see cref="Packet"/> as byte array</param>
+        /// <returns>
+        /// <see cref="Packet"/> if deserialization was successful, else null
+        /// </returns>
         public static Packet Deserialize(byte[] bytes) {
             BytesReader reader = new BytesReader(bytes);
 
@@ -128,10 +130,13 @@ namespace Adrenak.AirPeer {
             if (flag.Equals("PACKET_DATA")) {
                 try {
                     packet.Tag = reader.ReadString();
-                    packet.Payload = reader.ReadBytes(bytes.Length - reader.Index);
+                    
+                    var payloadLen = bytes.Length - reader.Index;
+                    packet.Payload = reader.ReadBytes(payloadLen);
                 }
                 catch (Exception e) {
-                    UnityEngine.Debug.LogError("Packet deserialization error: " + e.Message);
+                    var msg = "Packet deserialization error: " + e.Message;
+                    UnityEngine.Debug.LogError(msg);
                     packet = null;
                 }
             }
@@ -144,7 +149,7 @@ namespace Adrenak.AirPeer {
         /// <summary>
         /// Serializes <see cref="Packet"/> instance into a byte array 
         /// </summary>
-        /// <returns>Returns byte array if successful else throws exception</returns>
+        /// <returns>Byte array if successful else throws exception</returns>
         public byte[] Serialize() {
             try {
                 BytesWriter writer = new BytesWriter();
@@ -154,7 +159,8 @@ namespace Adrenak.AirPeer {
                 return writer.Bytes;
             }
             catch (Exception e) {
-                UnityEngine.Debug.LogError("Packet serialization error : " + e.Message);
+                var msg = "Packet serialization error : " + e.Message;
+                UnityEngine.Debug.LogError(msg);
                 throw;
             }
         }
@@ -166,10 +172,9 @@ namespace Adrenak.AirPeer {
         public override string ToString() {
             try {
                 StringBuilder sb = new StringBuilder("Packet:");
-                sb.Append("\n");
-                sb.Append("Tag=").Append(Tag).Append("\n")
-                    .Append("PayloadLength=").Append(Payload.Length).Append("\n")
-                    .Append("Payload=").Append(Payload).Append("\n");
+                sb.Append("\nTag=").Append(Tag);
+                sb.Append("\nPayloadLength=").Append(Payload.Length);
+                sb.Append("\nPayload=").Append(BitConverter.ToString(Payload));
                 return sb.ToString();
             }
             catch { return base.ToString(); }

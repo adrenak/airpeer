@@ -128,7 +128,12 @@ namespace Adrenak.AirPeer {
 		}
 
 		public Rect ReadRect() {
-			return new Rect(ReadFloat(), ReadFloat(), ReadFloat(), ReadFloat());
+			return new Rect(
+				ReadFloat(), 
+				ReadFloat(), 
+				ReadFloat(), 
+				ReadFloat()
+			);
 		}
 
 		public Rect[] ReadRectArray() {
@@ -159,7 +164,12 @@ namespace Adrenak.AirPeer {
 		}
 
 		public Color ReadColor() {
-			return new Color(ReadFloat(), ReadFloat(), ReadFloat(), ReadFloat());
+			return new Color(
+				ReadFloat(), 
+				ReadFloat(), 
+				ReadFloat(), 
+				ReadFloat()
+			);
 		}
 
 		public Color[] ReadColorArray() {

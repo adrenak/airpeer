@@ -3,7 +3,7 @@ using Byn.Net;
 using System.Text;
 
 namespace Adrenak.AirPeer {
-    public static class Extensions {
+    internal static class Extensions {
         public static string GetDataAsString(this NetworkEvent netEvent) {
             if (netEvent.MessageData == null) return netEvent.Type.ToString();
             var bytes = netEvent.GetDataAsByteArray();

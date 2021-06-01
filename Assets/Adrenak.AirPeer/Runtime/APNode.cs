@@ -8,39 +8,40 @@ namespace Adrenak.AirPeer {
     /// <summary>
     /// An AirPeer Node. Can serve as a server and a client.
     /// </summary>
-    public class APNode {
+    public class APNode : IDisposable {
         /// <summary>
-        /// Describes the different modes that an <see cref="APNode"/> can be on
+        /// Describes the possible modes of <see cref="APNode"/>
         /// </summary>
         public enum Mode {
             /// <summary>
-            /// State when the node is neither a server (i.e. hosting a network with or
-            /// without clients) or a client (connected to a server and part of a network).
+            /// State when the node is neither a server (ie. hosting a network)
+            /// or a client (ie. connected to a server hosting a network).
             /// </summary>
             Idle,
 
             /// <summary>
-            /// State when the node is hosting a network at an address. May or may not 
-            /// have clients.
+            /// State when the node is hosting a network at an address. 
             /// </summary>
             Server,
 
             /// <summary>
-            /// State when the node is connected to a server node and part of a network.
+            /// State when the node is connected to a server
             /// </summary>
             Client
         }
 
         /// <summary>
-        /// The current mode of the node. The <see cref="Mode"/> changes to <see cref="Mode.Idle"/>
-        /// in error scenarios too such as when the node fails to become a server, fails to connect
-        /// to a server. Or when the server is stopped or the client is disconnected.
+        /// The current mode of the node. The <see cref="Mode"/> changes 
+        /// to <see cref="Mode.Idle"/> in error scenarios too, such as when the
+        /// node fails to become a server, fails to connect to a server. 
+        /// Or when the server is stopped or the client is disconnected.
         /// </summary>
         public Mode CurrentMode { get; private set; }
 
         /// <summary>
-        /// The address of the network the node is i) hosting as a server or ii) connected to
-        /// a as a client
+        /// The address of the network the node is 
+        /// (i) hosting as a server 
+        /// or (ii) connected to as a client
         /// </summary>
         public string Address { get; private set; }
 
@@ -87,28 +88,38 @@ namespace Adrenak.AirPeer {
         public event Action OnServerStartSuccess;
 
         /// <summary>
-        /// Fired when the server fails to start along with the exception
+        /// Fired when the server fails to start along with the exception.
         /// </summary>
         public event Action<Exception> OnServerStartFailure;
 
         /// <summary>
-        /// Fired when the server stops
+        /// Fired when the server stops. Called on a node that was hosting
+        /// a server.
         /// </summary>
         public event Action OnServerStop;
 
         // Client relevant
         /// <summary>
-        /// Fired when this node is connected to a server
+        /// Fired when this node is connected to a server. 
+        /// Called on the node that attempts to connect to a server.
         /// </summary>
         public event Action OnConnected;
 
         /// <summary>
-        /// Fired when this node is disconnected
+        /// Fired when this node is disconnected. Called on a client
+        /// node after it tries to disconnect,
         /// </summary>
         public event Action OnDisconnected;
 
         /// <summary>
-        /// Fired when this node fails to connect
+        /// Fired when the server a client node was connected to is stopped.
+        /// Called on client node.
+        /// </summary>
+        public event Action OnRemoteServerClosed;
+
+        /// <summary>
+        /// Fired when this node fails to connect. Called on the node trying
+        /// to connect to a server.
         /// </summary>
         public event Action<Exception> OnConnectionFailed;
 
@@ -117,10 +128,16 @@ namespace Adrenak.AirPeer {
         ConnectionId serverCID = ConnectionId.INVALID;
 
         /// <summary>
-        /// Constructs a <see cref="APNode"/> with the given the signaling server URL and with a default list of ICE servers.
+        /// Constructs a <see cref="APNode"/>
         /// </summary>
-        /// <param name="signalingServer">The URL of the signalling server</param>
-        public APNode(string signalingServer) : this(signalingServer, new[] {
+        /// <param name="signalingServer">Signalling server URL</param>
+        /// <param name="apNetworkGameObjectName">
+        /// Optional: Name of the APNetwork GameObject
+        /// </param>
+        public APNode(
+            string signalingServer,
+            string apNetworkGameObjectName = null
+        ) : this(signalingServer, new[] {
             "stun.l.google.com:19302",
             "stun1.l.google.com:19302",
             "stun2.l.google.com:19302",
@@ -128,16 +145,29 @@ namespace Adrenak.AirPeer {
             "stun4.l.google.com:19302",
             "stun.vivox.com:3478",
             "stun.freecall.com:3478"
-        }) { }
+            },
+            apNetworkGameObjectName
+        ) { }
 
         /// <summary>
-        /// Constructs a node with the given the signaling server and a list of ICE servers
+        /// Constructs a <see cref="APNode"/> instance
         /// </summary>
-        /// <param name="signalingServer">The URL of the signalling server</param>
-        /// <param name="iceServer">List of URLs of ICE servers</param>
-        public APNode(string signalingServer, string[] iceServer) {
+        /// <param name="signalingServer">The signalling server URL</param>
+        /// <param name="iceServers">List of URLs of ICE servers</param>
+        /// <param name="apNetworkGameObjectName">
+        /// Optional: Name of the APNetwork GameObject
+        /// </param>
+        public APNode(
+            string signalingServer,
+            string[] iceServers,
+            string apNetworkGameObjectName = null
+        ) {
             CurrentMode = Mode.Idle;
-            network = APNetwork.New(signalingServer, iceServer);
+            network = APNetwork.New(
+                signalingServer: signalingServer,
+                iceServers: iceServers,
+                gameObjectName: apNetworkGameObjectName
+            );
 
             network.OnServerStartSuccess += Network_OnServerStartSuccess;
             network.OnServerStartFailure += Network_OnServerStartFailure;
@@ -161,6 +191,14 @@ namespace Adrenak.AirPeer {
                 tmpAddress = address;
                 network.StartServer(address);
             }
+            else if (CurrentMode == Mode.Server) {
+                var e = new Exception($"Already hosting address {Address}");
+                OnServerStartFailure?.Invoke(e);
+            }
+            else {
+                var e = new Exception($"Already connected to addr {Address}");
+                OnServerStartFailure?.Invoke(e);
+            }
         }
 
         /// <summary>
@@ -179,6 +217,14 @@ namespace Adrenak.AirPeer {
                 tmpAddress = address;
                 network.Connect(address);
             }
+            else if (CurrentMode == Mode.Client) {
+                var e = new Exception("Already connected to addr " + Address);
+                OnConnectionFailed?.Invoke(e);
+            }
+            else {
+                var e = new Exception("Already connected to addr " + Address);
+                OnConnectionFailed?.Invoke(e);
+            }
         }
 
         /// <summary>
@@ -194,8 +240,9 @@ namespace Adrenak.AirPeer {
         /// </summary>
         /// <param name="recipient">Recipient peer ID</param>
         /// <param name="packet">The packet containing the message</param>
-        /// <param name="reliable">Whether the message is reliable or not</param>
-        public void SendPacket(short recipient, Packet packet, bool reliable = false) =>
+        /// <param name="reliable">Whether data is sent UDP/TCP style</param>
+        public void SendPacket
+        (short recipient, Packet packet, bool reliable = false) =>
             SendPacket(new List<short> { recipient }, packet, reliable);
 
         /// <summary>
@@ -203,8 +250,9 @@ namespace Adrenak.AirPeer {
         /// </summary>
         /// <param name="recipients">Recipient peer IDs</param>
         /// <param name="packet">The packet containing the message</param>
-        /// <param name="reliable">Whether the message is reliable or not</param>
-        public void SendPacket(List<short> recipients, Packet packet, bool reliable = false) =>
+        /// <param name="reliable">Whether data is sent UDP/TCP style</param>
+        public void SendPacket
+        (List<short> recipients, Packet packet, bool reliable = false) =>
             SendRaw(recipients, packet.Serialize(), reliable);
 
         /// <summary>
@@ -212,8 +260,9 @@ namespace Adrenak.AirPeer {
         /// </summary>
         /// <param name="recipient">The recipient peer ID</param>
         /// <param name="bytes">The byte array to send</param>
-        /// <param name="reliable">Whether the message is reliable or not</param>
-        public void SendRaw(short recipient, byte[] bytes, bool reliable = false) =>
+        /// <param name="reliable">Whether data is sent UDP/TCP style</param>
+        public void SendRaw
+        (short recipient, byte[] bytes, bool reliable = false) =>
             SendRaw(new List<short> { recipient }, bytes, reliable);
 
         /// <summary>
@@ -221,8 +270,9 @@ namespace Adrenak.AirPeer {
         /// </summary>
         /// <param name="recipients">A list of the recipient peer IDs</param>
         /// <param name="bytes">The byte array to send</param>
-        /// <param name="reliable">Whether the message is reliable or not</param>
-        public void SendRaw(List<short> recipients, byte[] bytes, bool reliable = false) {
+        /// <param name="reliable">Whether data is sent UDP/TCP style</param>
+        public void SendRaw
+        (List<short> recipients, byte[] bytes, bool reliable = false) {
             if (recipients == null || recipients.Count == 0)
                 recipients = new List<short> { 1 };
 
@@ -233,15 +283,29 @@ namespace Adrenak.AirPeer {
             };
             var bytesToSend = message.Serialize();
 
-            // If we're a client, we only send to the server. The server will pass on the message
-            // to any other clients in the recipient list
-            if (CurrentMode == Mode.Client)
-                network.SendData(serverCID, bytesToSend, 0, bytesToSend.Length, reliable);
-            // If we're the server, we send to all the intended recipients separately
+            // If we're a client, we only send to the server. 
+            // The server will pass on the message to clients in recipient list
+            if (CurrentMode == Mode.Client) {
+                network.SendData(
+                    id: serverCID,
+                    data: bytesToSend,
+                    offset: 0,
+                    len: bytesToSend.Length,
+                    reliable: reliable
+                );
+            }
+            // If we're the server, we send to all the recipients
             else if (CurrentMode == Mode.Server) {
                 foreach (var recipient in recipients)
-                    if (recipient != ID)
-                        network.SendData(new ConnectionId(recipient), bytesToSend, 0, bytesToSend.Length, reliable);
+                    if (recipient != ID) {
+                        network.SendData(
+                            id: new ConnectionId(recipient),
+                            data: bytesToSend,
+                            offset: 0,
+                            len: bytesToSend.Length,
+                            reliable: reliable
+                        );
+                    }
             }
         }
 
@@ -258,15 +322,21 @@ namespace Adrenak.AirPeer {
 
         void Network_OnServerStartFailure(NetworkEvent e) {
             Reset();
-            OnServerStartFailure?.Invoke(new Exception(e.GetDataAsString() + e.Info));
+            OnServerStartFailure?.Invoke(
+                new Exception(e.GetDataAsString() + e.Info)
+            );
         }
 
         // This is called only on the server, not on the client side
         void Network_OnServerStopped(NetworkEvent e) {
-            // We let all the clients know that we have closed with a reserved tag packet.
-            if (CurrentMode == Mode.Server) {   // Just making sure we're the server
-                var packet = new Packet().WithTag(Packet.ReservedTags.ServerClosed);
-                SendPacket(Peers, packet, true);
+            // Using a reserved packet tag, 
+            // we let all the clients know that we have closed the server
+            if (CurrentMode == Mode.Server) {
+                SendPacket(
+                    Peers,
+                    new Packet().WithTag(Packet.ReservedTags.ServerClosed),
+                    true
+                );
                 Reset();
                 OnServerStop?.Invoke();
             }
@@ -276,17 +346,20 @@ namespace Adrenak.AirPeer {
             if (CurrentMode == Mode.Server) {
                 var theNewID = e.ConnectionId.id;
 
-                // Let the new client know what its ID is using a reserved tag packet
-                var packet = new Packet().With(Packet.ReservedTags.ClientSetID, theNewID.GetBytes());
+                // Notify a new client of its ID is using a reserved tag packet
+                var tag = Packet.ReservedTags.ClientSetID;
+                var packet = new Packet().With(tag, theNewID.GetBytes());
                 SendPacket(theNewID, packet, true);
 
-                // Using reserved tag packets, let the new client know about all the old clients
-                // and the old clients know about the new client
+                // Using reserved tag packets, let the new client know about 
+                // all the old clients and the old clients about the new client
                 foreach (var anOldID in Peers) {
-                    packet = new Packet().With(Packet.ReservedTags.ClientJoined, anOldID.GetBytes());
+                    tag = Packet.ReservedTags.ClientJoined;
+                    packet = new Packet().With(tag, anOldID.GetBytes());
                     SendPacket(theNewID, packet, true);
 
-                    packet = new Packet().With(Packet.ReservedTags.ClientJoined, theNewID.GetBytes());
+                    tag = Packet.ReservedTags.ClientJoined;
+                    packet = new Packet().With(tag, theNewID.GetBytes());
                     SendPacket(anOldID, packet, true);
                 }
 
@@ -305,15 +378,19 @@ namespace Adrenak.AirPeer {
 
         void Network_OnConnectionFailed(NetworkEvent e) {
             Reset();
-            OnConnectionFailed?.Invoke(new Exception(e.GetDataAsString() + e.Info));
+            var ex = new Exception(e.GetDataAsString() + e.Info);
+            OnConnectionFailed?.Invoke(ex);
         }
 
         void Network_OnDisconnection(NetworkEvent e) {
             if (CurrentMode == Mode.Server) {
                 Peers.Remove(e.ConnectionId.id);
 
-                // Tell all the other clients that a client has left using reserved tag packets
-                var packet = new Packet().With(Packet.ReservedTags.ClientLeft, e.ConnectionId.id.GetBytes());
+                // Using a reserved tag, we let all the other clients know 
+                // that a client has left
+                var tag = Packet.ReservedTags.ClientLeft;
+                var packet = new Packet().WithTag(tag)
+                    .WithPayload(e.ConnectionId.id.GetBytes());
                 SendPacket(Peers, packet, true);
 
                 OnClientLeft?.Invoke(e.ConnectionId.id);
@@ -358,7 +435,7 @@ namespace Adrenak.AirPeer {
 
                     case Packet.ReservedTags.ServerClosed:
                         Reset();
-                        OnServerStop?.Invoke();
+                        OnRemoteServerClosed?.Invoke();
                         break;
                 }
                 return;
@@ -386,7 +463,13 @@ namespace Adrenak.AirPeer {
                             recipients = new short[] { recipient },
                             bytes = packet.Serialize()
                         };
-                        network.SendData(new ConnectionId(recipient), m.Serialize(), 0, m.Serialize().Length, reliable);
+                        network.SendData(
+                            id: new ConnectionId(recipient),
+                            data: m.Serialize(),
+                            offset: 0,
+                            len: m.Serialize().Length,
+                            reliable: reliable
+                        );
                     }
                 }
             }
@@ -395,8 +478,21 @@ namespace Adrenak.AirPeer {
         void Reset() {
             ID = -1;
             CurrentMode = Mode.Idle;
+            foreach (var peer in Peers)
+                OnClientLeft?.Invoke(peer);
             Peers.Clear();
             Address = null;
+        }
+
+        /// <summary>
+        /// Disposes this <see cref="APNode"/> instance by disposing
+        /// the internal <see cref="APNetwork"/> instance and resetting
+        /// state
+        /// </summary>
+        public void Dispose() {
+            OnDisconnected?.Invoke();
+            network.Dispose();
+            Reset();
         }
     }
 }
