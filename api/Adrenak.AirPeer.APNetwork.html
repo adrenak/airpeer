@@ -95,7 +95,7 @@
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="Adrenak_AirPeer_APNetwork_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class APNetwork : MonoBehaviour</code></pre>
+    <pre><code class="lang-csharp hljs">public class APNetwork : MonoBehaviour, IDisposable</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
@@ -123,7 +123,7 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">address</span></td>
-        <td><p>The address at which the server is running</p>
+        <td><p>Address of the server to connect to</p>
 </td>
       </tr>
     </tbody>
@@ -159,14 +159,26 @@
   </table>
   
   
+  <a id="Adrenak_AirPeer_APNetwork_Dispose_" data-uid="Adrenak.AirPeer.APNetwork.Dispose*"></a>
+  <h4 id="Adrenak_AirPeer_APNetwork_Dispose" data-uid="Adrenak.AirPeer.APNetwork.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Disposes the internal WebRTC network,
+then destroys this <a class="xref" href="Adrenak.AirPeer.APNetwork.html">APNetwork</a> instance </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  
+  
   <a id="Adrenak_AirPeer_APNetwork_New_" data-uid="Adrenak.AirPeer.APNetwork.New*"></a>
-  <h4 id="Adrenak_AirPeer_APNetwork_New_System_String_System_String___" data-uid="Adrenak.AirPeer.APNetwork.New(System.String,System.String[])">New(String, String[])</h4>
+  <h4 id="Adrenak_AirPeer_APNetwork_New_System_String_System_String___System_String_" data-uid="Adrenak.AirPeer.APNetwork.New(System.String,System.String[],System.String)">New(String, String[], String)</h4>
   <div class="markdown level1 summary"><p>Creates a new APNetwork instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static APNetwork New(string signalingServer, string[] iceServers)</code></pre>
+    <pre><code class="lang-csharp hljs">public static APNetwork New(string signalingServer, string[] iceServers, string gameObjectName = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -181,13 +193,20 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">signalingServer</span></td>
-        <td><p>The URL of the signaling server</p>
+        <td><p>The signaling server URL</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>[]</td>
         <td><span class="parametername">iceServers</span></td>
         <td><p>List of ICE server URLs</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">gameObjectName</span></td>
+        <td><p>Optional: 
+Name of the GameObject hosting the new <a class="xref" href="Adrenak.AirPeer.APNetwork.html">APNetwork</a></p>
 </td>
       </tr>
     </tbody>
@@ -216,7 +235,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SendData(ConnectionId id, byte[] data, int offset, int length, bool reliable)</code></pre>
+    <pre><code class="lang-csharp hljs">public void SendData(ConnectionId id, byte[] data, int offset, int len, bool reliable)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -231,7 +250,7 @@
       <tr>
         <td><span class="xref">ConnectionId</span></td>
         <td><span class="parametername">id</span></td>
-        <td><p>The Id of the connection over which data is send</p>
+        <td><p>The Id of the connection to send data to</p>
 </td>
       </tr>
       <tr>
@@ -248,14 +267,14 @@
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">length</span></td>
-        <td><p>Length of the data starting from offset in data</p>
+        <td><span class="parametername">len</span></td>
+        <td><p>Length of the data starting</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">reliable</span></td>
-        <td><p>Whether data is sent UDP or TCP style</p>
+        <td><p>Whether data is sent UDP/TCP style</p>
 </td>
       </tr>
     </tbody>
@@ -269,7 +288,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void StartServer(string address)</code></pre>
+    <pre><code class="lang-csharp hljs">public void StartServer(string addr)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -283,8 +302,8 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">address</span></td>
-        <td><p>Address at which the server will start</p>
+        <td><span class="parametername">addr</span></td>
+        <td><p>Address at which the server will run</p>
 </td>
       </tr>
     </tbody>
@@ -330,7 +349,7 @@
   
   
   <h4 id="Adrenak_AirPeer_APNetwork_OnDisconnection" data-uid="Adrenak.AirPeer.APNetwork.OnDisconnection">OnDisconnection</h4>
-  <div class="markdown level1 summary"><p>Fired when a connection is closed. Called on both the server and client</p>
+  <div class="markdown level1 summary"><p>Fired when a connection is closed. Called on both server and client</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -380,7 +399,8 @@
   
   
   <h4 id="Adrenak_AirPeer_APNetwork_OnNewConnection" data-uid="Adrenak.AirPeer.APNetwork.OnNewConnection">OnNewConnection</h4>
-  <div class="markdown level1 summary"><p>Fired when a new connection is formed. Called on both the server and client</p>
+  <div class="markdown level1 summary"><p>Fired when a new connection is formed. 
+Called on both the server and client</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>

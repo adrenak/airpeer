@@ -39,15 +39,28 @@ references:
   isSpec: "True"
   fullName: Adrenak.AirPeer.APNetwork.Disconnect
   nameWithType: APNetwork.Disconnect
-- uid: Adrenak.AirPeer.APNetwork.New(System.String,System.String[])
-  name: New(String, String[])
-  href: api/Adrenak.AirPeer.APNetwork.html#Adrenak_AirPeer_APNetwork_New_System_String_System_String___
-  commentId: M:Adrenak.AirPeer.APNetwork.New(System.String,System.String[])
-  name.vb: New(String, String())
-  fullName: Adrenak.AirPeer.APNetwork.New(System.String, System.String[])
-  fullName.vb: Adrenak.AirPeer.APNetwork.New(System.String, System.String())
-  nameWithType: APNetwork.New(String, String[])
-  nameWithType.vb: APNetwork.New(String, String())
+- uid: Adrenak.AirPeer.APNetwork.Dispose
+  name: Dispose()
+  href: api/Adrenak.AirPeer.APNetwork.html#Adrenak_AirPeer_APNetwork_Dispose
+  commentId: M:Adrenak.AirPeer.APNetwork.Dispose
+  fullName: Adrenak.AirPeer.APNetwork.Dispose()
+  nameWithType: APNetwork.Dispose()
+- uid: Adrenak.AirPeer.APNetwork.Dispose*
+  name: Dispose
+  href: api/Adrenak.AirPeer.APNetwork.html#Adrenak_AirPeer_APNetwork_Dispose_
+  commentId: Overload:Adrenak.AirPeer.APNetwork.Dispose
+  isSpec: "True"
+  fullName: Adrenak.AirPeer.APNetwork.Dispose
+  nameWithType: APNetwork.Dispose
+- uid: Adrenak.AirPeer.APNetwork.New(System.String,System.String[],System.String)
+  name: New(String, String[], String)
+  href: api/Adrenak.AirPeer.APNetwork.html#Adrenak_AirPeer_APNetwork_New_System_String_System_String___System_String_
+  commentId: M:Adrenak.AirPeer.APNetwork.New(System.String,System.String[],System.String)
+  name.vb: New(String, String(), String)
+  fullName: Adrenak.AirPeer.APNetwork.New(System.String, System.String[], System.String)
+  fullName.vb: Adrenak.AirPeer.APNetwork.New(System.String, System.String(), System.String)
+  nameWithType: APNetwork.New(String, String[], String)
+  nameWithType.vb: APNetwork.New(String, String(), String)
 - uid: Adrenak.AirPeer.APNetwork.New*
   name: New
   href: api/Adrenak.AirPeer.APNetwork.html#Adrenak_AirPeer_APNetwork_New_
@@ -145,21 +158,21 @@ references:
   commentId: T:Adrenak.AirPeer.APNode
   fullName: Adrenak.AirPeer.APNode
   nameWithType: APNode
-- uid: Adrenak.AirPeer.APNode.#ctor(System.String)
-  name: APNode(String)
-  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode__ctor_System_String_
-  commentId: M:Adrenak.AirPeer.APNode.#ctor(System.String)
-  fullName: Adrenak.AirPeer.APNode.APNode(System.String)
-  nameWithType: APNode.APNode(String)
-- uid: Adrenak.AirPeer.APNode.#ctor(System.String,System.String[])
-  name: APNode(String, String[])
-  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode__ctor_System_String_System_String___
-  commentId: M:Adrenak.AirPeer.APNode.#ctor(System.String,System.String[])
-  name.vb: APNode(String, String())
-  fullName: Adrenak.AirPeer.APNode.APNode(System.String, System.String[])
-  fullName.vb: Adrenak.AirPeer.APNode.APNode(System.String, System.String())
-  nameWithType: APNode.APNode(String, String[])
-  nameWithType.vb: APNode.APNode(String, String())
+- uid: Adrenak.AirPeer.APNode.#ctor(System.String,System.String)
+  name: APNode(String, String)
+  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode__ctor_System_String_System_String_
+  commentId: M:Adrenak.AirPeer.APNode.#ctor(System.String,System.String)
+  fullName: Adrenak.AirPeer.APNode.APNode(System.String, System.String)
+  nameWithType: APNode.APNode(String, String)
+- uid: Adrenak.AirPeer.APNode.#ctor(System.String,System.String[],System.String)
+  name: APNode(String, String[], String)
+  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode__ctor_System_String_System_String___System_String_
+  commentId: M:Adrenak.AirPeer.APNode.#ctor(System.String,System.String[],System.String)
+  name.vb: APNode(String, String(), String)
+  fullName: Adrenak.AirPeer.APNode.APNode(System.String, System.String[], System.String)
+  fullName.vb: Adrenak.AirPeer.APNode.APNode(System.String, System.String(), System.String)
+  nameWithType: APNode.APNode(String, String[], String)
+  nameWithType.vb: APNode.APNode(String, String(), String)
 - uid: Adrenak.AirPeer.APNode.#ctor*
   name: APNode
   href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode__ctor_
@@ -219,6 +232,19 @@ references:
   isSpec: "True"
   fullName: Adrenak.AirPeer.APNode.Disconnect
   nameWithType: APNode.Disconnect
+- uid: Adrenak.AirPeer.APNode.Dispose
+  name: Dispose()
+  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode_Dispose
+  commentId: M:Adrenak.AirPeer.APNode.Dispose
+  fullName: Adrenak.AirPeer.APNode.Dispose()
+  nameWithType: APNode.Dispose()
+- uid: Adrenak.AirPeer.APNode.Dispose*
+  name: Dispose
+  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode_Dispose_
+  commentId: Overload:Adrenak.AirPeer.APNode.Dispose
+  isSpec: "True"
+  fullName: Adrenak.AirPeer.APNode.Dispose
+  nameWithType: APNode.Dispose
 - uid: Adrenak.AirPeer.APNode.ID
   name: ID
   href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode_ID
@@ -304,6 +330,12 @@ references:
   commentId: E:Adrenak.AirPeer.APNode.OnReceiveID
   fullName: Adrenak.AirPeer.APNode.OnReceiveID
   nameWithType: APNode.OnReceiveID
+- uid: Adrenak.AirPeer.APNode.OnRemoteServerClosed
+  name: OnRemoteServerClosed
+  href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode_OnRemoteServerClosed
+  commentId: E:Adrenak.AirPeer.APNode.OnRemoteServerClosed
+  fullName: Adrenak.AirPeer.APNode.OnRemoteServerClosed
+  nameWithType: APNode.OnRemoteServerClosed
 - uid: Adrenak.AirPeer.APNode.OnServerStartFailure
   name: OnServerStartFailure
   href: api/Adrenak.AirPeer.APNode.html#Adrenak_AirPeer_APNode_OnServerStartFailure
@@ -1199,313 +1231,6 @@ references:
   isSpec: "True"
   fullName: Adrenak.AirPeer.EndianUtility.RequiresEndianCorrection
   nameWithType: EndianUtility.RequiresEndianCorrection
-- uid: Adrenak.AirPeer.Extensions
-  name: Extensions
-  href: api/Adrenak.AirPeer.Extensions.html
-  commentId: T:Adrenak.AirPeer.Extensions
-  fullName: Adrenak.AirPeer.Extensions
-  nameWithType: Extensions
-- uid: Adrenak.AirPeer.Extensions.Concat*
-  name: Concat
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_Concat_
-  commentId: Overload:Adrenak.AirPeer.Extensions.Concat
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.Concat
-  nameWithType: Extensions.Concat
-- uid: Adrenak.AirPeer.Extensions.Concat``1(``0[],``0[])
-  name: Concat<T>(T[], T[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_Concat__1___0_____0___
-  commentId: M:Adrenak.AirPeer.Extensions.Concat``1(``0[],``0[])
-  name.vb: Concat(Of T)(T(), T())
-  fullName: Adrenak.AirPeer.Extensions.Concat<T>(T[], T[])
-  fullName.vb: Adrenak.AirPeer.Extensions.Concat(Of T)(T(), T())
-  nameWithType: Extensions.Concat<T>(T[], T[])
-  nameWithType.vb: Extensions.Concat(Of T)(T(), T())
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Boolean)
-  name: GetBytes(Boolean)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Boolean_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Boolean)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Boolean)
-  nameWithType: Extensions.GetBytes(Boolean)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Char)
-  name: GetBytes(Char)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Char_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Char)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Char)
-  nameWithType: Extensions.GetBytes(Char)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Double)
-  name: GetBytes(Double)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Double_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Double)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Double)
-  nameWithType: Extensions.GetBytes(Double)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Int16)
-  name: GetBytes(Int16)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Int16_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Int16)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Int16)
-  nameWithType: Extensions.GetBytes(Int16)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Int32)
-  name: GetBytes(Int32)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Int32_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Int32)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Int32)
-  nameWithType: Extensions.GetBytes(Int32)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Int64)
-  name: GetBytes(Int64)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Int64_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Int64)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Int64)
-  nameWithType: Extensions.GetBytes(Int64)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.Single)
-  name: GetBytes(Single)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_Single_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.Single)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.Single)
-  nameWithType: Extensions.GetBytes(Single)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.UInt16)
-  name: GetBytes(UInt16)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_UInt16_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.UInt16)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.UInt16)
-  nameWithType: Extensions.GetBytes(UInt16)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.UInt32)
-  name: GetBytes(UInt32)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_UInt32_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.UInt32)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.UInt32)
-  nameWithType: Extensions.GetBytes(UInt32)
-- uid: Adrenak.AirPeer.Extensions.GetBytes(System.UInt64)
-  name: GetBytes(UInt64)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_System_UInt64_
-  commentId: M:Adrenak.AirPeer.Extensions.GetBytes(System.UInt64)
-  fullName: Adrenak.AirPeer.Extensions.GetBytes(System.UInt64)
-  nameWithType: Extensions.GetBytes(UInt64)
-- uid: Adrenak.AirPeer.Extensions.GetBytes*
-  name: GetBytes
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetBytes_
-  commentId: Overload:Adrenak.AirPeer.Extensions.GetBytes
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.GetBytes
-  nameWithType: Extensions.GetBytes
-- uid: Adrenak.AirPeer.Extensions.GetDataAsString(NetworkEvent)
-  name: GetDataAsString(NetworkEvent)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetDataAsString_NetworkEvent_
-  commentId: M:Adrenak.AirPeer.Extensions.GetDataAsString(NetworkEvent)
-  fullName: Adrenak.AirPeer.Extensions.GetDataAsString(NetworkEvent)
-  nameWithType: Extensions.GetDataAsString(NetworkEvent)
-- uid: Adrenak.AirPeer.Extensions.GetDataAsString*
-  name: GetDataAsString
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetDataAsString_
-  commentId: Overload:Adrenak.AirPeer.Extensions.GetDataAsString
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.GetDataAsString
-  nameWithType: Extensions.GetDataAsString
-- uid: Adrenak.AirPeer.Extensions.GetUTF8Bytes(System.String)
-  name: GetUTF8Bytes(String)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetUTF8Bytes_System_String_
-  commentId: M:Adrenak.AirPeer.Extensions.GetUTF8Bytes(System.String)
-  fullName: Adrenak.AirPeer.Extensions.GetUTF8Bytes(System.String)
-  nameWithType: Extensions.GetUTF8Bytes(String)
-- uid: Adrenak.AirPeer.Extensions.GetUTF8Bytes*
-  name: GetUTF8Bytes
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_GetUTF8Bytes_
-  commentId: Overload:Adrenak.AirPeer.Extensions.GetUTF8Bytes
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.GetUTF8Bytes
-  nameWithType: Extensions.GetUTF8Bytes
-- uid: Adrenak.AirPeer.Extensions.ToArray*
-  name: ToArray
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToArray_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToArray
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToArray
-  nameWithType: Extensions.ToArray
-- uid: Adrenak.AirPeer.Extensions.ToArray``1(``0)
-  name: ToArray<T>(T)
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToArray__1___0_
-  commentId: M:Adrenak.AirPeer.Extensions.ToArray``1(``0)
-  name.vb: ToArray(Of T)(T)
-  fullName: Adrenak.AirPeer.Extensions.ToArray<T>(T)
-  fullName.vb: Adrenak.AirPeer.Extensions.ToArray(Of T)(T)
-  nameWithType: Extensions.ToArray<T>(T)
-  nameWithType.vb: Extensions.ToArray(Of T)(T)
-- uid: Adrenak.AirPeer.Extensions.ToBoolean(System.Byte[])
-  name: ToBoolean(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToBoolean_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToBoolean(System.Byte[])
-  name.vb: ToBoolean(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToBoolean(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToBoolean(System.Byte())
-  nameWithType: Extensions.ToBoolean(Byte[])
-  nameWithType.vb: Extensions.ToBoolean(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToBoolean*
-  name: ToBoolean
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToBoolean_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToBoolean
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToBoolean
-  nameWithType: Extensions.ToBoolean
-- uid: Adrenak.AirPeer.Extensions.ToChar(System.Byte[])
-  name: ToChar(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToChar_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToChar(System.Byte[])
-  name.vb: ToChar(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToChar(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToChar(System.Byte())
-  nameWithType: Extensions.ToChar(Byte[])
-  nameWithType.vb: Extensions.ToChar(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToChar*
-  name: ToChar
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToChar_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToChar
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToChar
-  nameWithType: Extensions.ToChar
-- uid: Adrenak.AirPeer.Extensions.ToDouble(System.Byte[])
-  name: ToDouble(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToDouble_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToDouble(System.Byte[])
-  name.vb: ToDouble(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToDouble(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToDouble(System.Byte())
-  nameWithType: Extensions.ToDouble(Byte[])
-  nameWithType.vb: Extensions.ToDouble(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToDouble*
-  name: ToDouble
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToDouble_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToDouble
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToDouble
-  nameWithType: Extensions.ToDouble
-- uid: Adrenak.AirPeer.Extensions.ToFloat(System.Byte[])
-  name: ToFloat(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToFloat_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToFloat(System.Byte[])
-  name.vb: ToFloat(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToFloat(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToFloat(System.Byte())
-  nameWithType: Extensions.ToFloat(Byte[])
-  nameWithType.vb: Extensions.ToFloat(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToFloat*
-  name: ToFloat
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToFloat_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToFloat
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToFloat
-  nameWithType: Extensions.ToFloat
-- uid: Adrenak.AirPeer.Extensions.ToInt(System.Byte[])
-  name: ToInt(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToInt_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToInt(System.Byte[])
-  name.vb: ToInt(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToInt(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToInt(System.Byte())
-  nameWithType: Extensions.ToInt(Byte[])
-  nameWithType.vb: Extensions.ToInt(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToInt*
-  name: ToInt
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToInt_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToInt
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToInt
-  nameWithType: Extensions.ToInt
-- uid: Adrenak.AirPeer.Extensions.ToLong(System.Byte[])
-  name: ToLong(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToLong_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToLong(System.Byte[])
-  name.vb: ToLong(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToLong(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToLong(System.Byte())
-  nameWithType: Extensions.ToLong(Byte[])
-  nameWithType.vb: Extensions.ToLong(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToLong*
-  name: ToLong
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToLong_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToLong
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToLong
-  nameWithType: Extensions.ToLong
-- uid: Adrenak.AirPeer.Extensions.ToShort(System.Byte[])
-  name: ToShort(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToShort_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToShort(System.Byte[])
-  name.vb: ToShort(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToShort(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToShort(System.Byte())
-  nameWithType: Extensions.ToShort(Byte[])
-  nameWithType.vb: Extensions.ToShort(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToShort*
-  name: ToShort
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToShort_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToShort
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToShort
-  nameWithType: Extensions.ToShort
-- uid: Adrenak.AirPeer.Extensions.ToUInt(System.Byte[])
-  name: ToUInt(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUInt_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToUInt(System.Byte[])
-  name.vb: ToUInt(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToUInt(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToUInt(System.Byte())
-  nameWithType: Extensions.ToUInt(Byte[])
-  nameWithType.vb: Extensions.ToUInt(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToUInt*
-  name: ToUInt
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUInt_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToUInt
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToUInt
-  nameWithType: Extensions.ToUInt
-- uid: Adrenak.AirPeer.Extensions.ToULong(System.Byte[])
-  name: ToULong(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToULong_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToULong(System.Byte[])
-  name.vb: ToULong(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToULong(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToULong(System.Byte())
-  nameWithType: Extensions.ToULong(Byte[])
-  nameWithType.vb: Extensions.ToULong(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToULong*
-  name: ToULong
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToULong_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToULong
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToULong
-  nameWithType: Extensions.ToULong
-- uid: Adrenak.AirPeer.Extensions.ToUShort(System.Byte[])
-  name: ToUShort(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUShort_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToUShort(System.Byte[])
-  name.vb: ToUShort(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToUShort(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToUShort(System.Byte())
-  nameWithType: Extensions.ToUShort(Byte[])
-  nameWithType.vb: Extensions.ToUShort(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToUShort*
-  name: ToUShort
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUShort_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToUShort
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToUShort
-  nameWithType: Extensions.ToUShort
-- uid: Adrenak.AirPeer.Extensions.ToUTF8String(System.Byte[])
-  name: ToUTF8String(Byte[])
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUTF8String_System_Byte___
-  commentId: M:Adrenak.AirPeer.Extensions.ToUTF8String(System.Byte[])
-  name.vb: ToUTF8String(Byte())
-  fullName: Adrenak.AirPeer.Extensions.ToUTF8String(System.Byte[])
-  fullName.vb: Adrenak.AirPeer.Extensions.ToUTF8String(System.Byte())
-  nameWithType: Extensions.ToUTF8String(Byte[])
-  nameWithType.vb: Extensions.ToUTF8String(Byte())
-- uid: Adrenak.AirPeer.Extensions.ToUTF8String*
-  name: ToUTF8String
-  href: api/Adrenak.AirPeer.Extensions.html#Adrenak_AirPeer_Extensions_ToUTF8String_
-  commentId: Overload:Adrenak.AirPeer.Extensions.ToUTF8String
-  isSpec: "True"
-  fullName: Adrenak.AirPeer.Extensions.ToUTF8String
-  nameWithType: Extensions.ToUTF8String
 - uid: Adrenak.AirPeer.Message
   name: Message
   href: api/Adrenak.AirPeer.Message.html

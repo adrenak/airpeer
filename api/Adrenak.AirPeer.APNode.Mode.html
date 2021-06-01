@@ -83,7 +83,7 @@
   
   <h1 id="Adrenak_AirPeer_APNode_Mode" data-uid="Adrenak.AirPeer.APNode.Mode" class="text-break">Enum APNode.Mode
   </h1>
-  <div class="markdown level0 summary"><p>Describes the different modes that an <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a> can be on</p>
+  <div class="markdown level0 summary"><p>Describes the possible modes of <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a></p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Adrenak.AirPeer.html">Adrenak.AirPeer</a></h6>
@@ -104,19 +104,18 @@
     <tbody>
       <tr>
         <td id="Adrenak_AirPeer_APNode_Mode_Client">Client</td>
-        <td><p>State when the node is connected to a server node and part of a network.</p>
+        <td><p>State when the node is connected to a server</p>
 </td>
       </tr>
       <tr>
         <td id="Adrenak_AirPeer_APNode_Mode_Idle">Idle</td>
-        <td><p>State when the node is neither a server (i.e. hosting a network with or
-without clients) or a client (connected to a server and part of a network).</p>
+        <td><p>State when the node is neither a server (ie. hosting a network)
+or a client (ie. connected to a server hosting a network).</p>
 </td>
       </tr>
       <tr>
         <td id="Adrenak_AirPeer_APNode_Mode_Server">Server</td>
-        <td><p>State when the node is hosting a network at an address. May or may not 
-have clients.</p>
+        <td><p>State when the node is hosting a network at an address. </p>
 </td>
       </tr>
     </tbody>

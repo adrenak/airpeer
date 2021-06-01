@@ -95,20 +95,20 @@
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="Adrenak_AirPeer_APNode_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class APNode</code></pre>
+    <pre><code class="lang-csharp hljs">public class APNode : IDisposable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   
   
   <a id="Adrenak_AirPeer_APNode__ctor_" data-uid="Adrenak.AirPeer.APNode.#ctor*"></a>
-  <h4 id="Adrenak_AirPeer_APNode__ctor_System_String_" data-uid="Adrenak.AirPeer.APNode.#ctor(System.String)">APNode(String)</h4>
-  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a> with the given the signaling server URL and with a default list of ICE servers.</p>
+  <h4 id="Adrenak_AirPeer_APNode__ctor_System_String_System_String_" data-uid="Adrenak.AirPeer.APNode.#ctor(System.String,System.String)">APNode(String, String)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public APNode(string signalingServer)</code></pre>
+    <pre><code class="lang-csharp hljs">public APNode(string signalingServer, string apNetworkGameObjectName = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -123,7 +123,13 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">signalingServer</span></td>
-        <td><p>The URL of the signalling server</p>
+        <td><p>Signalling server URL</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">apNetworkGameObjectName</span></td>
+        <td><p>Optional: Name of the APNetwork GameObject</p>
 </td>
       </tr>
     </tbody>
@@ -131,13 +137,13 @@
   
   
   <a id="Adrenak_AirPeer_APNode__ctor_" data-uid="Adrenak.AirPeer.APNode.#ctor*"></a>
-  <h4 id="Adrenak_AirPeer_APNode__ctor_System_String_System_String___" data-uid="Adrenak.AirPeer.APNode.#ctor(System.String,System.String[])">APNode(String, String[])</h4>
-  <div class="markdown level1 summary"><p>Constructs a node with the given the signaling server and a list of ICE servers</p>
+  <h4 id="Adrenak_AirPeer_APNode__ctor_System_String_System_String___System_String_" data-uid="Adrenak.AirPeer.APNode.#ctor(System.String,System.String[],System.String)">APNode(String, String[], String)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public APNode(string signalingServer, string[] iceServer)</code></pre>
+    <pre><code class="lang-csharp hljs">public APNode(string signalingServer, string[] iceServers, string apNetworkGameObjectName = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -152,13 +158,19 @@
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">signalingServer</span></td>
-        <td><p>The URL of the signalling server</p>
+        <td><p>The signalling server URL</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>[]</td>
-        <td><span class="parametername">iceServer</span></td>
+        <td><span class="parametername">iceServers</span></td>
         <td><p>List of URLs of ICE servers</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">apNetworkGameObjectName</span></td>
+        <td><p>Optional: Name of the APNetwork GameObject</p>
 </td>
       </tr>
     </tbody>
@@ -169,8 +181,9 @@
   
   <a id="Adrenak_AirPeer_APNode_Address_" data-uid="Adrenak.AirPeer.APNode.Address*"></a>
   <h4 id="Adrenak_AirPeer_APNode_Address" data-uid="Adrenak.AirPeer.APNode.Address">Address</h4>
-  <div class="markdown level1 summary"><p>The address of the network the node is i) hosting as a server or ii) connected to
-a as a client</p>
+  <div class="markdown level1 summary"><p>The address of the network the node is 
+(i) hosting as a server 
+or (ii) connected to as a client</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -196,9 +209,10 @@ a as a client</p>
   
   <a id="Adrenak_AirPeer_APNode_CurrentMode_" data-uid="Adrenak.AirPeer.APNode.CurrentMode*"></a>
   <h4 id="Adrenak_AirPeer_APNode_CurrentMode" data-uid="Adrenak.AirPeer.APNode.CurrentMode">CurrentMode</h4>
-  <div class="markdown level1 summary"><p>The current mode of the node. The <a class="xref" href="Adrenak.AirPeer.APNode.Mode.html">APNode.Mode</a> changes to <a class="xref" href="Adrenak.AirPeer.APNode.Mode.html#Adrenak_AirPeer_APNode_Mode_Idle">Idle</a>
-in error scenarios too such as when the node fails to become a server, fails to connect
-to a server. Or when the server is stopped or the client is disconnected.</p>
+  <div class="markdown level1 summary"><p>The current mode of the node. The <a class="xref" href="Adrenak.AirPeer.APNode.Mode.html">APNode.Mode</a> changes 
+to <a class="xref" href="Adrenak.AirPeer.APNode.Mode.html#Adrenak_AirPeer_APNode_Mode_Idle">Idle</a> in error scenarios too, such as when the
+node fails to become a server, fails to connect to a server. 
+Or when the server is stopped or the client is disconnected.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -315,6 +329,19 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   </div>
   
   
+  <a id="Adrenak_AirPeer_APNode_Dispose_" data-uid="Adrenak.AirPeer.APNode.Dispose*"></a>
+  <h4 id="Adrenak_AirPeer_APNode_Dispose" data-uid="Adrenak.AirPeer.APNode.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Disposes this <a class="xref" href="Adrenak.AirPeer.APNode.html">APNode</a> instance by disposing
+the internal <a class="xref" href="Adrenak.AirPeer.APNetwork.html">APNetwork</a> instance and resetting
+state</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  
+  
   <a id="Adrenak_AirPeer_APNode_SendPacket_" data-uid="Adrenak.AirPeer.APNode.SendPacket*"></a>
   <h4 id="Adrenak_AirPeer_APNode_SendPacket_List_System_Int16__Adrenak_AirPeer_Packet_System_Boolean_" data-uid="Adrenak.AirPeer.APNode.SendPacket(List{System.Int16},Adrenak.AirPeer.Packet,System.Boolean)">SendPacket(List&lt;Int16&gt;, Packet, Boolean)</h4>
   <div class="markdown level1 summary"><p>Sends a packet message to several recipient peers</p>
@@ -349,7 +376,7 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">reliable</span></td>
-        <td><p>Whether the message is reliable or not</p>
+        <td><p>Whether data is sent UDP/TCP style</p>
 </td>
       </tr>
     </tbody>
@@ -390,7 +417,7 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">reliable</span></td>
-        <td><p>Whether the message is reliable or not</p>
+        <td><p>Whether data is sent UDP/TCP style</p>
 </td>
       </tr>
     </tbody>
@@ -431,7 +458,7 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">reliable</span></td>
-        <td><p>Whether the message is reliable or not</p>
+        <td><p>Whether data is sent UDP/TCP style</p>
 </td>
       </tr>
     </tbody>
@@ -472,7 +499,7 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">reliable</span></td>
-        <td><p>Whether the message is reliable or not</p>
+        <td><p>Whether data is sent UDP/TCP style</p>
 </td>
       </tr>
     </tbody>
@@ -596,7 +623,8 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   
   
   <h4 id="Adrenak_AirPeer_APNode_OnConnected" data-uid="Adrenak.AirPeer.APNode.OnConnected">OnConnected</h4>
-  <div class="markdown level1 summary"><p>Fired when this node is connected to a server</p>
+  <div class="markdown level1 summary"><p>Fired when this node is connected to a server. 
+Called on the node that attempts to connect to a server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -621,7 +649,8 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   
   
   <h4 id="Adrenak_AirPeer_APNode_OnConnectionFailed" data-uid="Adrenak.AirPeer.APNode.OnConnectionFailed">OnConnectionFailed</h4>
-  <div class="markdown level1 summary"><p>Fired when this node fails to connect</p>
+  <div class="markdown level1 summary"><p>Fired when this node fails to connect. Called on the node trying
+to connect to a server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -646,7 +675,8 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   
   
   <h4 id="Adrenak_AirPeer_APNode_OnDisconnected" data-uid="Adrenak.AirPeer.APNode.OnDisconnected">OnDisconnected</h4>
-  <div class="markdown level1 summary"><p>Fired when this node is disconnected</p>
+  <div class="markdown level1 summary"><p>Fired when this node is disconnected. Called on a client
+node after it tries to disconnect,</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -720,8 +750,34 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   </table>
   
   
+  <h4 id="Adrenak_AirPeer_APNode_OnRemoteServerClosed" data-uid="Adrenak.AirPeer.APNode.OnRemoteServerClosed">OnRemoteServerClosed</h4>
+  <div class="markdown level1 summary"><p>Fired when the server a client node was connected to is stopped.
+Called on client node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action OnRemoteServerClosed</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.action">Action</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <h4 id="Adrenak_AirPeer_APNode_OnServerStartFailure" data-uid="Adrenak.AirPeer.APNode.OnServerStartFailure">OnServerStartFailure</h4>
-  <div class="markdown level1 summary"><p>Fired when the server fails to start along with the exception</p>
+  <div class="markdown level1 summary"><p>Fired when the server fails to start along with the exception.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -771,7 +827,8 @@ to a server. Or when the server is stopped or the client is disconnected.</p>
   
   
   <h4 id="Adrenak_AirPeer_APNode_OnServerStop" data-uid="Adrenak.AirPeer.APNode.OnServerStop">OnServerStop</h4>
-  <div class="markdown level1 summary"><p>Fired when the server stops</p>
+  <div class="markdown level1 summary"><p>Fired when the server stops. Called on a node that was hosting
+a server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
