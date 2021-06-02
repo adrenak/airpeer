@@ -85,27 +85,27 @@
 <p>AirPeer is distributed as a UPM package. There are many ways to install AirPeer. Here are 5 of them:
 <details><br><summary>Click to see more.</summary><br><br><p>
 <ol>
-<li><p>Packages&gt;manifest.json file </p>
+<li><p>Packages&gt;manifest.json file  </p>
 <ul>
 <li>Easiest method for most people.  </li>
 <li>Ensure you have NPMJS registry in manifest.json inside the <code>&quot;scopedRegistries&quot;</code> object and under the scopes <code>com.adrenak.airpeer</code> is added. Then add the package as a project dependency. Make sure <code>&quot;dependencies&quot;</code> array has this the package name. If done right your manifest.json should resemble this. Substitute <code>x.x.x</code> with the version of AirPeer that you want in your project :
 <code>{
-      &quot;dependencies&quot;: {
-          &quot;com.adrenak.airpeer&quot;: &quot;x.x.x&quot;
-          &lt;&lt;other dependencies of your project&gt;&gt;
-      },
-      &quot;scopedRegistries&quot;: [
-          {
-              &quot;name&quot;: &quot;npmjs&quot;,
-              &quot;url&quot;: &quot;https://registry.npmjs.com&quot;,
-              &quot;scopes&quot;: [
-                  &quot;com.adrenak.airpeer&quot;,
-                  &lt;&lt;other packages from npmjs registry&gt;&gt;
-              ]
-          },
-          &lt;&lt;Other scoped registries, if any&gt;&gt;
-      ]
-  }</code></li>
+       &quot;dependencies&quot;: {
+           &quot;com.adrenak.airpeer&quot;: &quot;x.x.x&quot;
+           &lt;&lt;other dependencies of your project&gt;&gt;
+       },
+       &quot;scopedRegistries&quot;: [
+           {
+               &quot;name&quot;: &quot;npmjs&quot;,
+               &quot;url&quot;: &quot;https://registry.npmjs.com&quot;,
+               &quot;scopes&quot;: [
+                   &quot;com.adrenak.airpeer&quot;,
+                   &lt;&lt;other packages from npmjs registry&gt;&gt;
+               ]
+           },
+           &lt;&lt;Other scoped registries, if any&gt;&gt;
+       ]
+   }</code></li>
 </ul>
 </li>
 <li><p>Git clone method. Clone this repository. Then do either of these</p>
