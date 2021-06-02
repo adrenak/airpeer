@@ -203,15 +203,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidYamlHeader"
-      ],
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "pXVUaUvx1gMHZwJleeVvn0+MaRI9xYf0Z2smoTC3Y8E="
+          "hash": "CnIsFgVVT0ukM9c/v5Y9A9Kcc4MtXQ86WVH+0h8he9o="
         }
       },
       "is_incremental": false,
