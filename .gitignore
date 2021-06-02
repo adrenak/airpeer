@@ -4,8 +4,6 @@
 /[Bb]uild/
 /[Bb]uilds/
 /Assets/AssetStoreTools*
-/Assets/ParellSync
-/Assets/ParellSync.meta
 
 # Visual Studio 2015 cache directory
 /.vs/

@@ -8,15 +8,12 @@ Built on top of [Christoph Kutza's](https://www.because-why-not.com/) WebRTC Net
 - For client to client communication (via server).
 - Event based API.
 - Message (de)serialization features.
-
----
-
+  
 ## Installation
 AirPeer is distributed as a UPM package. There are many ways to install AirPeer. Here are 5 of them:
-<details>
-  
+<details>  
 <summary>Click to see more.</summary>  
-
+<br>
 1. Packages>manifest.json file 
     * Easiest method for most people.  
     * Ensure you have NPMJS registry in manifest.json inside the `"scopedRegistries"` object and under the scopes `com.adrenak.airpeer` is added. Then add the package as a project dependency. Make sure `"dependencies"` array has this the package name. If done right your manifest.json should resemble this. Substitute `x.x.x` with the version of AirPeer that you want in your project :
@@ -63,33 +60,33 @@ AirPeer is distributed as a UPM package. There are many ways to install AirPeer.
 
 </details>  
   
----
 
 ## Documentation
 Manual and tutorials is WIP. In the meantime, please refer to codedoc generated documentation [here](http://www.vatsalambastha.com/airpeer).
-
----
-
+  
 ## Samples
 AirPeers comes with a couple of handy samples that show how you can connect to a WebRTC network and exchange messages. To import samples, go to Window>Package Manager. Find `Adrenak.AirPeer` and install Samples from the options on the right hand side of the window.
-
----
-
+  
 ## Signalling Server
 A Signalling server implementation can be found in the [AirSignal](https://github.com/adrenak/airsignal) repository.
   
 The samples in the AirPeer repository use an IP:Port that I am hosting, but it is neither garunteed to be online nor secure. 
   
 It is HIGHLY advised that you run AirSignal (or your own WebRTC signalling server implementation) on your own server and don't rely on my server. AirSignal can also be run locally localhost for easier testing.
-
----
-
+  
 ## Editor testing
 Use [ParellSync](https://github.com/VeriorPies/ParrelSync) to use the samples within the Unity editor. 
+  
+## Connectivity issues
+A major issue right now is that often two peers fail to connect. The problem is supposedly because of NAT failure.
 
----
+The plugins on which AirPeer operates are old and their source code is not open for editir. Refactoring AirPeer to make APNetwork an abstraction is planned. 
 
+This would then be used to make [Unity's WebRTC](https://github.com/Unity-Technologies/com.unity.webrtc), which is more robust, the underlying networking plugin. An abstract APNetwork would also mean that APNode can use different WebRTC implementations, such as the [MixedReality-WebRTC](https://github.com/microsoft/MixedReality-WebRTC) or custom ones.
+  
 ## Contact
-This repository is made by Vatsal Ambastha and is under the MIT license. Feel free to get in touch for helping support this project or commercial consultation/development for your own projects.
+This repository is made by Vatsal Ambastha and is under the MIT license.  
+  
+Feel free to get in touch for helping support this project. As well as for commercial consultation/development in your own projects.
 
 [@github](https://www.github.com/adrenak)  [@website](http://www.vatsalambastha.com)  [@twitter](https://www.twitter.com/vatsalambastha)  
