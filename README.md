@@ -14,9 +14,10 @@ AirPeer is distributed as a UPM package. There are many ways to install AirPeer.
 <details>  
 <summary>Click to see more.</summary>  
 <br>
-1. Packages>manifest.json file 
-    * Easiest method for most people.  
-    * Ensure you have NPMJS registry in manifest.json inside the `"scopedRegistries"` object and under the scopes `com.adrenak.airpeer` is added. Then add the package as a project dependency. Make sure `"dependencies"` array has this the package name. If done right your manifest.json should resemble this. Substitute `x.x.x` with the version of AirPeer that you want in your project :
+
+1. Packages>manifest.json file  
+  * Easiest method for most people.  
+  * Ensure you have NPMJS registry in manifest.json inside the `"scopedRegistries"` object and under the scopes `com.adrenak.airpeer` is added. Then add the package as a project dependency. Make sure `"dependencies"` array has this the package name. If done right your manifest.json should resemble this. Substitute `x.x.x` with the version of AirPeer that you want in your project :
 ```
         {
             "dependencies": {
