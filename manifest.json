@@ -2,11 +2,11 @@
   "sitemap": {
     "fileOptions": {
       "api/*": {
-        "baseUrl": "https://normanderwan.github.io/AirPeer/",
+        "baseUrl": "https://adrenak.github.io/airpeer/",
         "changefreq": "daily"
       }
     },
-    "baseUrl": "https://normanderwan.github.io/AirPeer/",
+    "baseUrl": "https://adrenak.github.io/airpeer/",
     "changefreq": "weekly"
   },
   "homepages": [],
