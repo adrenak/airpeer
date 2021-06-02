@@ -62,7 +62,7 @@
             }
         ],
         "sitemap": {
-            "baseUrl": "https://normanderwan.github.io/AirPeer",
+            "baseUrl": "https://adrenak.github.io/airpeer",
             "changefreq": "weekly",
             "fileOptions": {
                 "api/*": {
