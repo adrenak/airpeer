@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+using Adrenak.BRW;
+
 namespace Adrenak.AirPeer.Samples {
     /// <summary>
     /// A demo script that shows a constant stream of data sent from

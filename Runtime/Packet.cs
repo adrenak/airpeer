@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 
+using Adrenak.BRW;
+
 namespace Adrenak.AirPeer {
     /// <summary>
     /// Wraps a byte[] to provide a higher level object representing 
@@ -131,7 +133,7 @@ namespace Adrenak.AirPeer {
                 try {
                     packet.Tag = reader.ReadString();
                     
-                    var payloadLen = bytes.Length - reader.Index;
+                    var payloadLen = bytes.Length - reader.Cursor;
                     packet.Payload = reader.ReadBytes(payloadLen);
                 }
                 catch (Exception e) {

@@ -1,14 +1,16 @@
 {
     "name": "Adrenak.AirPeer.Samples",
     "references": [
-        "Adrenak.AirPeer.Runtime"
+        "Adrenak.AirPeer.Runtime",
+        "Adrenak.BRW"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
