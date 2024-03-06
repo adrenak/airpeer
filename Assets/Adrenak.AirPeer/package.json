@@ -25,5 +25,8 @@
     ],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org"
+	},
+	"dependencies": {
+		"com.adrenak.brw":"1.0.1"
 	}
 }

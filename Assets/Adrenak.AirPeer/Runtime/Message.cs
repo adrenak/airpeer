@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 
+using Adrenak.BRW;
+
 namespace Adrenak.AirPeer {
     /// <summary>
     /// Data structure representing how messages are send in AirPeer.
