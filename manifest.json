@@ -28,7 +28,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.APNetwork.html",
-          "hash": "ylHXuqJVnEQBgxeiU0IbYXPih2Tn0gAwUNteqXNImTQ="
+          "hash": "B6UzgjNmgU5CRkHGzKwKP0WcKxeYmHrmef2FaFxb2Hk="
         }
       },
       "is_incremental": false,
@@ -40,7 +40,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.APNode.Mode.html",
-          "hash": "mS3tiRet4ZsXwMX/Fo2wsx965l95crkupHwtdKV5ni8="
+          "hash": "R8vCYVowotIUyZOBWCvvgHYG+lgBVhSrjgtptpTzfbA="
         }
       },
       "is_incremental": false,
@@ -52,43 +52,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.APNode.html",
-          "hash": "ssH3KH1asrDzENjbJYPmDOtcDY9CxrDIBGBV1aA0Th0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Adrenak.AirPeer.BytesReader.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Adrenak.AirPeer.BytesReader.html",
-          "hash": "sW7sLXt49BCHo2bCLCEHiyXzRJPcCGyfq9MOQjlPZvU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Adrenak.AirPeer.BytesWriter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Adrenak.AirPeer.BytesWriter.html",
-          "hash": "d+PDwXmTdQry/dHXfJLIT7hGJUbuSdlXwTWQrQXCQjU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Adrenak.AirPeer.EndianUtility.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Adrenak.AirPeer.EndianUtility.html",
-          "hash": "oaQVG3RWXkU2Cc8roJNbFk1NgNMCwVJ+GLcB+EBhpek="
+          "hash": "JjM+zTKFxr5c5qt9BLCPs3PAQ5vDBVFIMht6s8kFvWI="
         }
       },
       "is_incremental": false,
@@ -100,7 +64,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Message.html",
-          "hash": "00E1xFcTg2E081XFeHSz0+xWlkPDqzyaxlfElh41CsQ="
+          "hash": "z777ts60vl4yqsypqTs10Z8e/LtSyIAkRM1A8sAs1Jw="
         }
       },
       "is_incremental": false,
@@ -112,7 +76,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Packet.ReservedTags.html",
-          "hash": "mrMS6YxppXs1BrvOmg+JRlOnFahUSPMpMj9RG41c/rs="
+          "hash": "rqoZaUOXBJ1dyOP4lAFrH5c6ie+14j+smszdu53ffeE="
         }
       },
       "is_incremental": false,
@@ -124,7 +88,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Packet.html",
-          "hash": "qqSFNEpGtVrwpoNFZeBPA3VmRNGATBicAP3+S9x4a2Y="
+          "hash": "YAJ2zp0PA4D2/K17zzK/090eu+3Nghma3Ah1pKvOUb8="
         }
       },
       "is_incremental": false,
@@ -136,7 +100,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Samples.APNodeDemo.html",
-          "hash": "zgNcNGEpNK82Q1AWSMsZ3NPs4ncJk200DBm7q1A+QTo="
+          "hash": "lVhpXSQ/8QQEyudCdLzVnnt7AK18kwBsGT7064pMr64="
         }
       },
       "is_incremental": false,
@@ -148,7 +112,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Samples.BytesReaderWriterDemo.html",
-          "hash": "oA5/M5bjEYhGT5TxBGRlYjwv881UD/tdF8ythTYIe7o="
+          "hash": "DW+5HvvGzMc98pYxYWcTbFHofwBI0F+tywoM8k4eQ5c="
         }
       },
       "is_incremental": false,
@@ -160,7 +124,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Samples.FrameCountStreamingDemo.html",
-          "hash": "yVpac34wGJiFpXcfoDh2TqepKvIFT2tZq4qRwvgIxyE="
+          "hash": "prYW21JzZ/n1edEAYzpT1rGpn3/lhQA2ZEE2gWibSdg="
         }
       },
       "is_incremental": false,
@@ -172,7 +136,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.Samples.html",
-          "hash": "Kd0s3Mhqnj6sAs4Qadi2YV38CYEvcS8fDEUvL4fIcNE="
+          "hash": "rwfXrbcAs1M5yY6uyITDwCI8xz4OWOqYR3Wi5kkXGLY="
         }
       },
       "is_incremental": false,
@@ -184,7 +148,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Adrenak.AirPeer.html",
-          "hash": "CgtT8LlHPP12uXdCf/iVKMFTRNEfh6FVV6AaTmNkLrY="
+          "hash": "u18LFWrhqG/humJ2lMCauu7p9tXkGbMsWpzhG1EnDpE="
         }
       },
       "is_incremental": false,
@@ -196,7 +160,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "s7+/SJS0RMGdXcjPCOMrWa6OmwHf+FMx8w6YerHf0kQ="
+          "hash": "8TfhHSatNr9pmzptJehQ9BoXunr3CCUpJjP1lD+MzUQ="
         }
       },
       "is_incremental": false,
@@ -208,7 +172,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "tf889UDUjz9aK99plaqBkcCzEXjUTYj5/oR4AAq884w="
+          "hash": "J/l65duFYH1ae6pH8noNunCZtNjtzXRxXL7Cl0vOlOk="
         }
       },
       "is_incremental": false,
@@ -247,7 +211,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 14,
+          "total_file_count": 11,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
